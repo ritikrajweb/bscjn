@@ -4,31 +4,31 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// --- 2. THE 20 B.Sc. TOPICS (FROM SYLLABUS) ---
+// --- 2. THE 20 B.Sc. SOCIO-CULTURAL TOPICS (FROM ANT-DSM 211 SYLLABUS) ---
 const assignmentTopics = [
-    { title: "Meaning & Scope of Archaeological Anthropology" },
-    { title: "Concepts of Prehistory and Proto-history" },
-    { title: "Relative Dating Methods and Their Relevance" },
-    { title: "Absolute Dating Methods and Their Relevance" },
-    { title: "Pleistocene Epoch: The Great Ice Age" },
-    { title: "Evidence of Quaternary Ice Age (River Terraces, Moraines)" },
-    { title: "Alpine and Himalayan Glaciations" },
-    { title: "Stone Tool Technology and Typology" },
-    { title: "Lower Palaeolithic Cultures of Europe (Abbevillian, Acheulian)" },
-    { title: "Lower Palaeolithic Cultures of India (Soan, Madrasian, Narmada)" },
-    { title: "Middle Palaeolithic Culture: Flake Tools Complex" },
-    { title: "Upper Palaeolithic Home and Cave Art" },
-    { title: "Mesolithic Cultures of Europe and Stone Age Industries in India" },
-    { title: "Chief Features of the Neolithic Revolution" },
-    { title: "Emergence of Human Settlements and Farming in India" },
-    { title: "The Neolithic Complex in India" },
-    { title: "Metal Age: Characteristics of Copper, Bronze, and Iron Ages" },
-    { title: "The Chief Characteristics and Decay of Indus Valley Civilization" },
-    { title: "Definition and Types of Megaliths" },
-    { title: "Distribution and Main Characteristics of Indian Megaliths" }
+    { title: "Anthropological Perspective and Orientation" },
+    { title: "Scope and Relevance of Socio-cultural Anthropology" },
+    { title: "Relationship of Socio-cultural Anthropology with other Disciplines" },
+    { title: "Concept of Society, Community, and Association" },
+    { title: "Social Groups: Types and Functions" },
+    { title: "Institution and Organization in Society" },
+    { title: "Status and Role in Society" },
+    { title: "Social Stratification: Concepts and Types" },
+    { title: "Concept and Attributes of Culture" },
+    { title: "Culture Trait, Culture Complex, and Culture Pattern" },
+    { title: "Cultural Integration and Cultural Universals" },
+    { title: "Processes of Culture Change: Acculturation and Transculturation" },
+    { title: "Social Institutions: Family and Marriage" },
+    { title: "Kinship Systems and Organization" },
+    { title: "Religion from an Anthropological Perspective" },
+    { title: "Economic and Political Organization in Simple Societies" },
+    { title: "Theories of Cultural Evolution" },
+    { title: "Diffusionism in Anthropology" },
+    { title: "Functionalism and Structuralism" },
+    { title: "Culture and Personality School of Thought" }
 ];
 
-// --- 3. B.Sc. STUDENT DATABASE (PARSED FROM PDF) ---
+// --- 3. B.Sc. STUDENT DATABASE ---
 const studentDB = {
     "Y25102011": { name: "RUDRAKSH CHOUHAN", course: "B.Sc.", topics: [11, 18] },
     "Y25102016": { name: "SONALI PANT", course: "B.Sc.", topics: [16, 3] },
@@ -204,7 +204,7 @@ document.getElementById('wa-help-btn').addEventListener('click', async function(
         { enrollment_no: currentStudentId || 'unregistered', action: 'whatsapp', device: device, timezone: timezone }
     ]);
     
-    window.open(`https://wa.me/918986937029?text=Hi%20Ritik,%20I'm%20from%20B.Sc.%20Sem%202,%20I%20need%20help%20with%20the%20ANT-DSM-311%20assignment.`, '_blank');
+    window.open(`https://wa.me/918986937029?text=Hi%20Ritik,%20I'm%20from%20B.Sc.%20Sem%202,%20I%20need%20help%20with%20the%20ANT-DSM-211%20assignment.`, '_blank');
 });
 
 document.getElementById('game-btn').addEventListener('click', async function(e) {
@@ -221,24 +221,13 @@ document.getElementById('game-btn').addEventListener('click', async function(e) 
 // --- 7. THE TRAP ROULETTE ---
 const trapLinks = [
     "https://youtu.be/HI8nIMRhuvo?si=DUAZbFgGgyWz4Gym",
-    "https://youtu.be/EyLcr-MYB1Q?si=KifwukQsr-7UDhKv",
-    "https://youtu.be/ZlpsGW1g4cA?si=ngPANFFNoxrslduX",
     "https://youtu.be/AJG-Nluvg5c?si=H-3jrY2DQmwVqt_Y",
-    "https://youtu.be/roTe_x_oJE8?si=XXsWzNCJrj8qeCmW",
-    "https://youtu.be/TN5CgsJFzWs?si=zE1Zrj-UY1Nx19kL",
     "https://youtu.be/bQ5NAumOtC0?si=9y64RxXIsDHIUkm2",
     "https://youtu.be/lNwApgaHK4Y?si=zAP92p1N6dTj62gj",
     "https://youtu.be/4TjrQ9sG9TE?si=DQwtYI2Tl6Hzxkft",
     "https://youtu.be/VX9npbMm6Cc?si=ApBJ7EaynaUTZ-_1",
-    "https://youtu.be/SVePV-i7lt4?si=2ER0OHyFeNeOUaZv",
-    "https://youtu.be/cKSpFkMr6Ik?si=BgzFq_akWW_CWW0C",
-    "https://youtu.be/4JkuHzcvKmY?si=MTRa6DMn-iv2GDLF",
     "https://youtu.be/7rym-VB6YhE?si=NjlcMJrh0DvqbAJ6",
-    "https://youtu.be/0UWL4Oa6PQA?si=UFwAUY7meIDfhqrE",
-    "https://youtu.be/FZ-1LyNJiL4?si=WkurOAz9ZWc9GKbj",
-    "https://youtu.be/xc0LQveanOk?si=oI8DncBSFamsv2md",
     "https://youtu.be/55Q9Ko1O5kQ?si=TtdqyCY5qCAFn5H0",
-    "https://youtu.be/DgKM2hXtsh0?si=y78DoZ_NAyp8KYjr",
     "https://youtu.be/0A4yLCUfIkE?si=jqrvFdzK44fwLQyf"
 ];
 

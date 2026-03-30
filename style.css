@@ -206,17 +206,17 @@ details[open] summary:before { transform: rotate(180deg); display: inline-block;
     fill: white;
 }
 
+/* Updated Game FAB CSS so the bottle isn't cropped */
 .game-fab {
-    background-color: #f7d46c; 
+    background-color: #fadd63; 
+    overflow: hidden; 
 }
 
 .game-fab img {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    box-sizing: border-box;
-    padding: 2px;
+    object-fit: contain; 
+    transform: scale(1.4); 
 }
 
 @media (max-width: 600px) { 
