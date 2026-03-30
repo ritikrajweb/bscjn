@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANT DSM 311 | B.Sc. Assignment Hub</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="card" id="landing-card">
+        <h2>Department of Anthropology</h2>
+        <h3 style="color: #555;">ANT DSM 311: An Introduction to Archeological Anthropology</h3>
+        <p>Enter your University Enrollment Number to access your personalized B.Sc. Semester II dashboard and assigned topics.</p>
+        
+        <div class="input-group">
+            <input type="text" id="enrollment-input" placeholder="e.g., Y25102011" required>
+            <button id="generate-btn" class="btn">Access Hub</button>
+        </div>
+        <p id="error-msg" class="hidden" style="color: #e74c3c; margin-top: 10px; font-weight: bold;">⚠️ Invalid Enrollment Number. Please check and try again.</p>
+
+        <p style="margin-top: 30px; color: #555; line-height: 1.4;">
+            Regards-<br>
+            <strong style="color: var(--primary-navy); font-size: 1.1em;">Dr. Ramendra Nath Kundu</strong><br>
+            Assistant Professor
+        </p>
+    </div>
+
+    <div id="results-area" class="hidden">
+        <div class="card">
+            <h2 id="student-name-display" style="color: #2c3e50; margin-bottom: 5px;"></h2>
+            <p id="student-details-display" style="color: #666; font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;"></p>
+            
+            <p>You are required to research and complete your <strong>Internal Assessment (IA) Theory Assignment</strong> on the following two assigned topics:</p>
+            
+            <div class="attention-banner">
+                <strong>📌 Important:</strong> Scroll past your assigned topics below to find the <strong>Mandatory Document Structure</strong>. (Practical assignments will be updated here soon).
+            </div>
+            
+            <div id="topic-list"></div>
+
+            <div class="req-box">
+                <details>
+                    <summary>View Mandatory Theory Assignment Structure</summary>
+                    <div class="details-content">
+                        <p><strong>Formatting:</strong> Times New Roman. Main Text: 12pt, Sub-Topics: 14pt (Bold), Titles: 16pt (Bold).</p>
+                        <ol>
+                            <li><strong>Front Page:</strong> Name, Enrollment Number, Course Code (ANT-DSM-311), and Semester II.</li>
+                            <li><strong>Index / Contents Page</strong></li>
+                            <li><strong>Topic 1 Analysis</strong>:
+                                <ul>
+                                    <li><strong>Introduction:</strong> Define the core unit your topic belongs to.</li>
+                                    <li><strong>Detailed Body:</strong> Comprehensive analysis (Minimum 4-5 pages).</li>
+                                    <li><strong>Diagrams:</strong> Mandatory sketches (e.g., Stone Tools, Stratigraphy, or Glaciations) if relevant to your topic.</li>
+                                    <li><strong>Conclusion:</strong> Summarizing the archaeological significance.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Topic 2 Analysis:</strong> (Follow exact same structure as above).</li>
+                            <li><strong>References/Bibliography:</strong> Cite standard texts (e.g., Sankalia 1964, Bhattacharya 1972) at the end.</li>
+                        </ol>
+                    </div>
+                </details>
+            </div>
+            
+            <div class="trap-card" id="trap-container">
+                <h3>✨ Assignment Jugaad</h3>
+                <p>Padhna chhoro. Yaha se direct ready-made assignment copy kar lo.</p>
+                <button id="cheat-btn" class="btn-cheat">▶️ Watch & Copy 🤫</button>
+            </div>
+
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd_-yJyRGe5ItHeVKHcC4pvhwPeouAJNyQ1RU_TimycBpdopA/viewform?usp=header" target="_blank" class="btn btn-submit">Submit Final Soft Copy Here</a>
+        </div>
+    </div>
+
+    <div class="watermark" id="watermark">
+        Made by <span class="hindi-name">ऋतिक</span> ✨
+    </div>
+
+    <div class="fab-container" id="fab-container">
+        <div class="fab-options">
+            <a href="#" id="game-btn" class="fab-item game-fab" title="Play My Game!">
+                <img src="icon.jpg" alt="Spin Game">
+            </a>
+            <a href="#" id="wa-help-btn" class="fab-item whatsapp-fab" title="Need Help?">
+                <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.423-.101.827z"></path></svg>
+            </a>
+        </div>
+        <div class="fab-main" title="Menu">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
