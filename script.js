@@ -49,7 +49,7 @@ const studentDB = {
     "Y25106010": { name: "ARYA CHOUBEY", course: "B.Sc.", topics: [10, 17] },
     "Y25106043": { name: "MUKTI JESWANI", course: "B.Sc.", topics: [3, 10] },
     "Y25109003": { name: "KANAK CHOUKSEY", course: "B.Sc.", topics: [3, 10] },
-    "Y25109015": { name: "POONAM DANGI", course: "B.Sc.", topics: [15, 2] },
+    "Y25109015": { name: "POONAM DIXIT", course: "B.Sc.", topics: [15, 2] },
     "Y25105006": { name: "AYUSHI JAIN", course: "B.Sc.", topics: [6, 13] },
     "Y25109013": { name: "MAHAK BURMAN", course: "B.Sc.", topics: [13, 0] },
     "Y25106001": { name: "AANAND KUMAR", course: "B.Sc.", topics: [1, 8] },
