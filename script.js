@@ -132,7 +132,7 @@ const studentDB = {
     "Y25102017": { name: "SUHANI", course: "B.Sc.", topics: [5, 13] },
     "Y25105019": { name: "POORNIMA DIXIT", course: "B.Sc.", topics: [6, 18] },
     "Y25105015": { name: "MAMTA NAMDEO", course: "B.Sc.", topics: [7, 12] },
-    "Y25105015": { name: "BINDU SHREE DAS", course: "B.Sc.", topics: [2, 16] },
+    "Y25101002": { name: "BINDU SHREE DAS", course: "B.Sc.", topics: [2, 16] },
 
 
 
