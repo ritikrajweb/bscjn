@@ -84,13 +84,13 @@ const studentDB = {
     "Y25109016": { name: "SHRADDHA SINGH THAKUR", course: "B.Sc.", topics: [16, 3] },
     "Y25106037": { name: "SUDIPTA ACHARJEE", course: "B.Sc.", topics: [17, 4] },
     "Y25105002": { name: "ANJALI SURYAVANSHI", course: "B.Sc.", topics: [2, 9] },
-    "Y25102004": { name: "RIPUNJITA BORAH", course: "B.Sc.", topics: [4, 11] },
+    "Y25102009": { name: "RIPUNJITA BORAH", course: "B.Sc.", topics: [4, 11] },
     "Y25109001": { name: "ARADHNA PAUL", course: "B.Sc.", topics: [1, 8] },
-    "Y25106009": { name: "AMBIKA DAHAYAT", course: "B.Sc.", topics: [9, 16] },
+    "Y25106005": { name: "AMBIKA DAHAYAT", course: "B.Sc.", topics: [9, 16] },
     "Y25102014": { name: "SHIVANGI SAHU", course: "B.Sc.", topics: [14, 1] },
     "Y25105017": { name: "NEERAJ SINGH", course: "B.Sc.", topics: [17, 4] },
     "Y25105010": { name: "HANSHIKA KORI", course: "B.Sc.", topics: [10, 17] },
-    "Y25106032": { name: "RAHIYA SHEIKH", course: "B.Sc.", topics: [12, 19] },
+    "Y25105022": { name: "RAHIYA SHEIKH", course: "B.Sc.", topics: [12, 19] },
     "Y25106038": { name: "SUNEET KAUR", course: "B.Sc.", topics: [18, 5] },
     "Y25106024": { name: "MENDKE SANDESH SADANAND", course: "B.Sc.", topics: [4, 11] },
     "Y25105031": { name: "ROHAN AHIRWAR", course: "B.Sc.", topics: [11, 18] },
@@ -122,7 +122,7 @@ const studentDB = {
     "Y25102019": { name: "ABHAY PRATAP SINGH LODHI", course: "B.Sc.", topics: [19, 6] },
     "Y25106045": { name: "SAKSHAM JAIN", course: "B.Sc.", topics: [5, 12] },
     "Y25105011": { name: "JAHANVI SOUR", course: "B.Sc.", topics: [11, 18] },
-    "Y25105028": { name: "TAMADA TANUJA", course: "B.Sc.", topics: [8, 15] },
+    "Y25105026": { name: "TAMADA TANUJA", course: "B.Sc.", topics: [8, 15] },
     "Y25106031": { name: "RIYA KUMARI", course: "B.Sc.", topics: [3, 10] },
     "Y25105029": { name: "VAIBHAV VISHNOI", course: "B.Sc.", topics: [3, 9] },
     "Y25102020": { name: "BHOOMI SONI", course: "B.Sc.", topics: [8, 10] },
@@ -134,6 +134,7 @@ const studentDB = {
     "Y25105015": { name: "MAMTA NAMDEO", course: "B.Sc.", topics: [7, 12] },
     "Y25101002": { name: "AMARJEET RAIKWAR", course: "B.Sc.", topics: [2, 16] },
     "Y25104006": { name: "BINDU SHREE DAS", course: "B.Sc.", topics: [7, 17] },
+    "Y25106034": { name: "SHALINI RAWAT", course: "B.Sc.", topics: [8, 17] },
 
 
 
