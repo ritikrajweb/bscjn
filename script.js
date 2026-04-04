@@ -1,11 +1,17 @@
-// --- 1. SUPABASE CONFIGURATION ---
+// --- 1. SUPABASE CONFIGURATION (DEFENSIVE INIT) ---
 const SUPABASE_URL = 'https://sdslegoqhygfziqwqxrk.supabase.co'; 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkc2xlZ29xaHlnZnppcXdxeHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4Njc1MzUsImV4cCI6MjA5MDQ0MzUzNX0.A3PER_vjw7-uSb3XY8fv4yZARhh84XhQtVlJvzSXnwI';
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let supabaseClient = null;
 
-// --- 2. THE 20 B.Sc. SOCIO-CULTURAL TOPICS (FROM ANT-DSM 211 SYLLABUS) ---
-// FIXED: Removed the extra outer brackets [ ]
+// Only initialize if the CDN successfully loaded the library
+if (typeof window.supabase !== 'undefined') {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else {
+    console.warn("Database connection blocked by client network/browser. Running in offline UI mode.");
+}
+
+// --- 2. THE 20 B.Sc. SOCIO-CULTURAL TOPICS ---
 const assignmentTopics = [
     { title: "What is Socio-Cultural Anthropology and describe its classification" },
     { title: "Scope and Relevance of Socio-cultural Anthropology" },
@@ -27,7 +33,6 @@ const assignmentTopics = [
 ];
 
 // --- 3. B.Sc. STUDENT DATABASE ---
-// FIXED: Removed the extra curly braces { } at the top and bottom
 const studentDB = {
     "Y25101002": { "name": "AMARJEET RAIKWAR", "course": "B.Sc.", "topics": [2, 14] },
     "Y25102001": { "name": "AANCHAL SHYAMANAND JHA", "course": "B.Sc.", "topics": [1, 7] },
@@ -149,97 +154,93 @@ function getDeviceData() {
     };
 }
 
-// --- 5. LOGIN LOGIC ---
-document.getElementById('generate-btn').addEventListener('click', async () => {
+// --- 5. LOGIN LOGIC (Decoupled & Bulletproof) ---
+document.getElementById('generate-btn').addEventListener('click', () => {
     const enrollment = document.getElementById('enrollment-input').value.trim().toUpperCase();
     const student = studentDB[enrollment];
     const errorMsg = document.getElementById('error-msg');
     
+    // 1. Immediate Validation
     if (!student) {
         errorMsg.classList.remove('hidden');
         return;
     }
     
+    // 2. Immediate UI Update (Priority)
     errorMsg.classList.add('hidden');
     currentStudentId = enrollment;
     
-    const { device, timezone } = getDeviceData();
+    document.getElementById('student-name-display').innerText = `Welcome, ${student.name}`;
+    document.getElementById('student-details-display').innerText = `Enrollment: ${enrollment} | Program: ${student.course}`;
     
-    // Log login
+    // Optimized DOM injection
+    const listDiv = document.getElementById('topic-list');
+    let topicsHTML = "";
+    student.topics.forEach(index => {
+        let topicObj = assignmentTopics[index];
+        if (topicObj) {
+            topicsHTML += `
+                <div class="book-item">
+                    <div class="book-title">${topicObj.title}</div>
+                </div>`;
+        }
+    });
+    listDiv.innerHTML = topicsHTML;
+
+    // Reveal UI instantly
+    document.getElementById('landing-card').classList.add('hidden');
+    document.getElementById('results-area').classList.remove('hidden');
+    setTimeout(() => { document.getElementById('watermark').classList.remove('hidden'); }, 500);
+
+    // 3. Background Analytics (Fires asynchronously without blocking UI)
+    if (supabaseClient) {
+        performBackgroundTracking(enrollment);
+    }
+});
+
+// Non-blocking function for analytics
+async function performBackgroundTracking(enrollment) {
+    const { device, timezone } = getDeviceData();
     try {
         await supabaseClient.from('tracking').insert([
-            { enrollment_no: currentStudentId, action: 'login', device: device, timezone: timezone }
+            { enrollment_no: enrollment, action: 'login', device: device, timezone: timezone }
         ]);
         
-        // Check cheat clicks
         const { count, error } = await supabaseClient
             .from('tracking')
             .select('*', { count: 'exact', head: true })
             .eq('enrollment_no', enrollment)
             .eq('action', 'cheat');
 
-        currentStrikeCount = count || 0;
-    } catch (e) {
-        console.error("Supabase tracking failed, continuing anyway:", e);
-    }
-
-    // Build Dashboard
-    document.getElementById('student-name-display').innerText = `Welcome, ${student.name}`;
-    document.getElementById('student-details-display').innerText = `Enrollment: ${enrollment} | Program: ${student.course}`;
-    
-    const listDiv = document.getElementById('topic-list');
-    listDiv.innerHTML = ''; 
-    student.topics.forEach(index => {
-        let topicObj = assignmentTopics[index];
-        if (topicObj) {
-            listDiv.innerHTML += `
-                <div class="book-item">
-                    <div class="book-title">${topicObj.title}</div>
-                </div>`;
+        if (!error && count !== null) {
+            currentStrikeCount = count;
+            if (currentStrikeCount >= 1) {
+                document.getElementById('trap-container').classList.add('hidden');
+            }
         }
-    });
-
-    if (currentStrikeCount >= 1) {
-        document.getElementById('trap-container').classList.add('hidden');
+    } catch (e) {
+        console.warn("Analytics telemetry failed, but UI remains functional.");
     }
-
-    // Reveal the UI 
-    document.getElementById('landing-card').classList.add('hidden');
-    document.getElementById('results-area').classList.remove('hidden');
-    
-    setTimeout(() => {
-        document.getElementById('watermark').classList.remove('hidden');
-    }, 500);
-});
+}
 
 // --- 6. FAB TRACKING LOGIC ---
-document.getElementById('wa-help-btn').addEventListener('click', async function(e) {
-    e.preventDefault(); 
+function logFabClick(action) {
+    if (!supabaseClient) return;
     const { device, timezone } = getDeviceData();
-    
-    try {
-        await supabaseClient.from('tracking').insert([
-            { enrollment_no: currentStudentId || 'unregistered', action: 'whatsapp', device: device, timezone: timezone }
-        ]);
-    } catch (e) {
-        console.error(e);
-    }
-    
+    supabaseClient.from('tracking').insert([
+        { enrollment_no: currentStudentId || 'unregistered', action: action, device: device, timezone: timezone }
+    ]).catch(e => console.warn("FAB tracking failed"));
+}
+
+document.getElementById('wa-help-btn').addEventListener('click', function(e) {
+    e.preventDefault(); 
+    logFabClick('whatsapp');
     window.open(`https://wa.me/918986937029?text=Hi%20Ritik,%20I'm%20from%20B.Sc.%20Sem%202,%20I%20need%20help%20with%20the%20ANT-DSM-211%20assignment.`, '_blank');
 });
 
-document.getElementById('game-btn').addEventListener('click', async function(e) {
+document.getElementById('game-btn').addEventListener('click', function(e) {
     e.preventDefault(); 
-    const { device, timezone } = getDeviceData();
-    
-    try {
-        await supabaseClient.from('tracking').insert([
-            { enrollment_no: currentStudentId || 'unregistered', action: 'game', device: device, timezone: timezone }
-        ]);
-    } catch (e) {
-        console.error(e);
-    }
-    
+    logFabClick('game');
     window.open('https://ritikspin.onrender.com', '_blank');
 });
 
@@ -256,36 +257,27 @@ const trapLinks = [
     "https://youtu.be/0A4yLCUfIkE?si=jqrvFdzK44fwLQyf"
 ];
 
-document.getElementById('cheat-btn').addEventListener('click', async function() {
+document.getElementById('cheat-btn').addEventListener('click', function() {
     currentStrikeCount++;
 
     let randomIndex;
     do {
         randomIndex = Math.floor(Math.random() * trapLinks.length);
     } while (randomIndex === lastMemeIndex);
-    
     lastMemeIndex = randomIndex; 
     
     const finalLink = trapLinks[randomIndex];
-    const { device, timezone } = getDeviceData();
     
-    try {
-        await supabaseClient.from('tracking').insert([
-            { 
-                enrollment_no: currentStudentId, 
-                action: 'cheat', 
-                strike_count: currentStrikeCount, 
-                meme_url: finalLink, 
-                device: device, 
-                timezone: timezone 
-            }
-        ]);
-    } catch (e) {
-        console.error(e);
+    // Background tracking
+    if (supabaseClient) {
+        const { device, timezone } = getDeviceData();
+        supabaseClient.from('tracking').insert([
+            { enrollment_no: currentStudentId, action: 'cheat', strike_count: currentStrikeCount, meme_url: finalLink, device: device, timezone: timezone }
+        ]).catch(e => console.warn("Trap tracking failed"));
     }
 
+    // Immediate execution
     window.open(finalLink, '_blank');
-    
     if (currentStrikeCount >= 1) {
         document.getElementById('trap-container').classList.add('hidden');
     }
