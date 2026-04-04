@@ -5,8 +5,8 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- 2. THE 20 B.Sc. SOCIO-CULTURAL TOPICS (FROM ANT-DSM 211 SYLLABUS) ---
+// FIXED: Removed the extra outer brackets [ ]
 const assignmentTopics = [
-   [
     { title: "What is Socio-Cultural Anthropology and describe its classification" },
     { title: "Scope and Relevance of Socio-cultural Anthropology" },
     { title: "Relationship of Socio-cultural Anthropology with other Disciplines" },
@@ -24,12 +24,11 @@ const assignmentTopics = [
     { title: "Theories of Cultural Evolution: Diffusionism" },
     { title: "Theories of Cultural Evolution: Functionalism and Structuralism" },
     { title: "Culture and Personality School of Thought in Socio-Cultural Anthropology" }
-]
 ];
 
 // --- 3. B.Sc. STUDENT DATABASE ---
+// FIXED: Removed the extra curly braces { } at the top and bottom
 const studentDB = {
-    {
     "Y25101002": { "name": "AMARJEET RAIKWAR", "course": "B.Sc.", "topics": [2, 14] },
     "Y25102001": { "name": "AANCHAL SHYAMANAND JHA", "course": "B.Sc.", "topics": [1, 7] },
     "Y25102002": { "name": "ADITY KUMARI", "course": "B.Sc.", "topics": [2, 7] },
@@ -135,9 +134,7 @@ const studentDB = {
     "Y25109016": { "name": "SHRADDHA SINGH THAKUR", "course": "B.Sc.", "topics": [14, 3] },
     "Y25109019": { "name": "TEJASWANI PATEL", "course": "B.Sc.", "topics": [16, 5] },
     "Y25109020": { "name": "YASHWANT AHIRWAR", "course": "B.Sc.", "topics": [5, 8] },
-    "Y25109021": { "name": "SURBHI DUBEY", "course": "B.Sc.", "topics": [1, 7] },
-
-
+    "Y25109021": { "name": "SURBHI DUBEY", "course": "B.Sc.", "topics": [1, 7] }
 };
 
 let currentStudentId = "";
@@ -169,18 +166,22 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
     const { device, timezone } = getDeviceData();
     
     // Log login
-    await supabaseClient.from('tracking').insert([
-        { enrollment_no: currentStudentId, action: 'login', device: device, timezone: timezone }
-    ]);
-    
-    // Check cheat clicks
-    const { count, error } = await supabaseClient
-        .from('tracking')
-        .select('*', { count: 'exact', head: true })
-        .eq('enrollment_no', enrollment)
-        .eq('action', 'cheat');
+    try {
+        await supabaseClient.from('tracking').insert([
+            { enrollment_no: currentStudentId, action: 'login', device: device, timezone: timezone }
+        ]);
+        
+        // Check cheat clicks
+        const { count, error } = await supabaseClient
+            .from('tracking')
+            .select('*', { count: 'exact', head: true })
+            .eq('enrollment_no', enrollment)
+            .eq('action', 'cheat');
 
-    currentStrikeCount = count || 0;
+        currentStrikeCount = count || 0;
+    } catch (e) {
+        console.error("Supabase tracking failed, continuing anyway:", e);
+    }
 
     // Build Dashboard
     document.getElementById('student-name-display').innerText = `Welcome, ${student.name}`;
@@ -190,10 +191,12 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
     listDiv.innerHTML = ''; 
     student.topics.forEach(index => {
         let topicObj = assignmentTopics[index];
-        listDiv.innerHTML += `
-            <div class="book-item">
-                <div class="book-title">${topicObj.title}</div>
-            </div>`;
+        if (topicObj) {
+            listDiv.innerHTML += `
+                <div class="book-item">
+                    <div class="book-title">${topicObj.title}</div>
+                </div>`;
+        }
     });
 
     if (currentStrikeCount >= 1) {
@@ -214,9 +217,13 @@ document.getElementById('wa-help-btn').addEventListener('click', async function(
     e.preventDefault(); 
     const { device, timezone } = getDeviceData();
     
-    await supabaseClient.from('tracking').insert([
-        { enrollment_no: currentStudentId || 'unregistered', action: 'whatsapp', device: device, timezone: timezone }
-    ]);
+    try {
+        await supabaseClient.from('tracking').insert([
+            { enrollment_no: currentStudentId || 'unregistered', action: 'whatsapp', device: device, timezone: timezone }
+        ]);
+    } catch (e) {
+        console.error(e);
+    }
     
     window.open(`https://wa.me/918986937029?text=Hi%20Ritik,%20I'm%20from%20B.Sc.%20Sem%202,%20I%20need%20help%20with%20the%20ANT-DSM-211%20assignment.`, '_blank');
 });
@@ -225,9 +232,13 @@ document.getElementById('game-btn').addEventListener('click', async function(e) 
     e.preventDefault(); 
     const { device, timezone } = getDeviceData();
     
-    await supabaseClient.from('tracking').insert([
-        { enrollment_no: currentStudentId || 'unregistered', action: 'game', device: device, timezone: timezone }
-    ]);
+    try {
+        await supabaseClient.from('tracking').insert([
+            { enrollment_no: currentStudentId || 'unregistered', action: 'game', device: device, timezone: timezone }
+        ]);
+    } catch (e) {
+        console.error(e);
+    }
     
     window.open('https://ritikspin.onrender.com', '_blank');
 });
@@ -258,16 +269,20 @@ document.getElementById('cheat-btn').addEventListener('click', async function() 
     const finalLink = trapLinks[randomIndex];
     const { device, timezone } = getDeviceData();
     
-    await supabaseClient.from('tracking').insert([
-        { 
-            enrollment_no: currentStudentId, 
-            action: 'cheat', 
-            strike_count: currentStrikeCount, 
-            meme_url: finalLink, 
-            device: device, 
-            timezone: timezone 
-        }
-    ]);
+    try {
+        await supabaseClient.from('tracking').insert([
+            { 
+                enrollment_no: currentStudentId, 
+                action: 'cheat', 
+                strike_count: currentStrikeCount, 
+                meme_url: finalLink, 
+                device: device, 
+                timezone: timezone 
+            }
+        ]);
+    } catch (e) {
+        console.error(e);
+    }
 
     window.open(finalLink, '_blank');
     
