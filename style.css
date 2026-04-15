@@ -175,7 +175,7 @@ details[open] summary:before { transform: rotate(180deg); display: inline-block;
 }
 
 .fab-container:hover .fab-main svg {
-    transform: rotate(45deg); /* Turns the Plus icon into an X */
+    transform: rotate(45deg);
 }
 
 .fab-item {
@@ -206,7 +206,6 @@ details[open] summary:before { transform: rotate(180deg); display: inline-block;
     fill: white;
 }
 
-/* Updated Game FAB CSS so the bottle isn't cropped */
 .game-fab {
     background-color: #fadd63; 
     overflow: hidden; 
@@ -224,3 +223,47 @@ details[open] summary:before { transform: rotate(180deg); display: inline-block;
     .fab-main { width: 55px; height: 55px; }
     .fab-item { width: 45px; height: 45px; }
 }
+
+/* --- Voting UI Styles --- */
+.voting-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.vote-option {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background: white;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vote-option:hover {
+    border-color: var(--accent-gold);
+    background: #fffcf5;
+}
+
+.vote-option input[type="radio"] {
+    margin-right: 12px;
+    transform: scale(1.2);
+    accent-color: var(--primary-navy);
+}
+
+.vote-option span {
+    font-weight: 600;
+    color: var(--text-main);
+    text-transform: capitalize;
+}
+
+.voting-list::-webkit-scrollbar { width: 6px; }
+.voting-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+.voting-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+.voting-list::-webkit-scrollbar-thumb:hover { background: #aaa; }

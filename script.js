@@ -1,10 +1,10 @@
-// --- 1. SUPABASE CONFIGURATION (DEFENSIVE INIT) ---
+// --- 1. SUPABASE CONFIGURATION ---
+// Note: Ensure your Supabase table 'votes' is created to make the voting system work!
 const SUPABASE_URL = 'https://sdslegoqhygfziqwqxrk.supabase.co'; 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkc2xlZ29xaHlnZnppcXdxeHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4Njc1MzUsImV4cCI6MjA5MDQ0MzUzNX0.A3PER_vjw7-uSb3XY8fv4yZARhh84XhQtVlJvzSXnwI';
 
 let supabaseClient = null;
 
-// Only initialize if the CDN successfully loaded the library
 if (typeof window.supabase !== 'undefined') {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 } else {
@@ -31,6 +31,61 @@ const assignmentTopics = [
     { title: "Theories of Cultural Evolution: Functionalism and Structuralism" },
     { title: "Culture and Personality School of Thought in Socio-Cultural Anthropology" }
 ];
+
+// --- 2.5 PRACTICAL GROUPS DATA ---
+const practicalGroups = {
+    "G1": { 
+        topic: "Navigating Challenges: The Experiences of Working Women in the Workplace", 
+        members: ["Shivangi Sahu", "Shreya Maurya", "Suhani", "Ananya Gautam", "Meghadri Roy", "Prasant Devtalla", "Rudraksh Chouhan", "Rohini Baidh", "Ripunjita Borah", "Panishmita Bag", "Harshita Sahu", "Amarjeet Raikwar"] 
+    },
+    "G2": { 
+        topic: "Getting to Know Our Future: A Demographics Profile of Primary School Students", 
+        members: ["Sneha kumari", "Harshita Choubey", "Arya Choubey", "Mahi soni", "Divyansh suryavanshi", "Bindu das", "Kanak chouksey", "Poonam Dixit", "Tejaswini patel", "Mahak Burman", "Sandesh mandeke", "Anand kumar", "Nainsi Soni"] 
+    },
+    "G3": { 
+        topic: "Assessing Traffic Knowledge and Road Safety Awareness Among Bikers in Sagar", 
+        members: ["Adity kumari", "Sonali pani", "Bhoomi Soni", "Shradha raikwar", "Shradha rajput", "Tanisha shilpi", "Seemantani bisen", "Jashoda bhoi", "Abhay pratap Singh Lodhi", "Satyam Adiwashi", "Anjali suryavanshi", "Gopal Dinkar"] 
+    },
+    "G4": { 
+        topic: "Traditions Unveiled: An In-Depth Study of Marriage Customs in Sagar", 
+        members: ["Mukti Jeswani", "Kanchan", "Nandini mishra", "Ambika dahiya", "Shalini rawat", "Kaify yusuf", "Catherin joy", "Surbhi dubey", "Khushubu jaiswal", "Sakshi", "Shraddha singh thakur", "Aavni M"] 
+    },
+    "G5": { 
+        topic: "Social Perception of Dowry Among the Residents of Sagar", 
+        members: ["Ashmi chouhan", "Monica Pandey", "Rahiya Shiekh", "Nandani Kurmi", "Mamta Namdeo", "Poornima Dixit", "Anshika Pandey", "Amisha Sharma", "Khushi Prasad", "Kanchi Soni", "Hanshika Kori", "Ragini badholiya"] 
+    },
+    "G6": { 
+        topic: "The Socio-Economic Issues Confronting Out-of-State Students at Doctor Harisingh Gour Vishwavidyalaya", 
+        members: ["Nandini mishra", "Kaify Yusuf", "Aavani M", "Catherine joy", "Kanchan", "Mukti jaiswal", "Shalini Rawat", "Ambika dahiya", "Surbhi Dubey", "Khushubu jaiswal", "Shraddha Singh thakur", "Sakshi"] 
+    },
+    "G7": { 
+        topic: "Books vs. AI: A Comparative Study of Student Preferences at Doctor Harisingh Gour Vishwavidyalaya", 
+        members: ["Babloo kumar", "Ayushi jain", "Anuj dwivedi", "Priydarshni Dubey", "Payal chourasia", "Aanchal jha", "Vaibhav vishnoi", "Sakshi gautam", "Tanuja tamada", "Jahanvi sour", "Suhani patel", "Neeraj singh"] 
+    },
+    "G8": { 
+        topic: "Connecting Cultures: The Impact of Outer Culture on Local Traditions in Sagar", 
+        members: ["Suneet kaur", "Kaushal kumar", "Sneha thakur", "Saksham Jain", "Sudipto Acharjee", "Parth Rawat", "Tanishq Sharma", "Rikansha yashona", "Shambhavi Tiwari", "Ankita patel", "Khushi Mishra", "Pankaj shakya", "Vranda chaurasiya"] 
+    },
+    "G9": { 
+        topic: "Understanding Menstruation Myths and Taboos in Rural vs. Urban Sagar", 
+        members: ["Lavanya Singh", "Lavanya Sharma", "Nandni Sharma", "Kashish Kumari", "Anjali Rai", "Riya Patel", "Aman Rathore", "Tushar Mishra", "Tanuja Chaurasia"] 
+    },
+    "G10": { 
+        topic: "Social Perception of Female Feticide Among the Residents of Sagar", 
+        members: ["Gaurav Patel", "Ankush Patel", "Krishna Yadav", "Rampal Ahirwar", "Shivam Jaiswal", "Rohan Ahirwar"] 
+    }
+};
+
+function findStudentGroup(studentName) {
+    const cleanName = studentName.toLowerCase().trim();
+    for (const [groupId, groupInfo] of Object.entries(practicalGroups)) {
+        const isMember = groupInfo.members.some(member => 
+            cleanName.includes(member.split(' ')[0].toLowerCase())
+        );
+        if (isMember) return { id: groupId, ...groupInfo };
+    }
+    return null;
+}
 
 // --- 3. B.Sc. STUDENT DATABASE ---
 const studentDB = {
@@ -146,7 +201,6 @@ let currentStudentId = "";
 let currentStrikeCount = 0;
 let lastMemeIndex = -1; 
 
-// --- 4. DEVICE SCRAPER ---
 function getDeviceData() {
     return {
         device: navigator.userAgent,
@@ -154,26 +208,23 @@ function getDeviceData() {
     };
 }
 
-// --- 5. LOGIN LOGIC (Decoupled & Bulletproof) ---
+// --- 5. LOGIN LOGIC ---
 document.getElementById('generate-btn').addEventListener('click', () => {
     const enrollment = document.getElementById('enrollment-input').value.trim().toUpperCase();
     const student = studentDB[enrollment];
     const errorMsg = document.getElementById('error-msg');
     
-    // 1. Immediate Validation
     if (!student) {
         errorMsg.classList.remove('hidden');
         return;
     }
     
-    // 2. Immediate UI Update (Priority)
     errorMsg.classList.add('hidden');
     currentStudentId = enrollment;
     
     document.getElementById('student-name-display').innerText = `Welcome, ${student.name}`;
     document.getElementById('student-details-display').innerText = `Enrollment: ${enrollment} | Program: ${student.course}`;
     
-    // Optimized DOM injection
     const listDiv = document.getElementById('topic-list');
     let topicsHTML = "";
     student.topics.forEach(index => {
@@ -187,18 +238,50 @@ document.getElementById('generate-btn').addEventListener('click', () => {
     });
     listDiv.innerHTML = topicsHTML;
 
-    // Reveal UI instantly
+    // --- NEW: Practical & Voting Logic ---
+    const studentGroup = findStudentGroup(student.name);
+    
+    if (studentGroup) {
+        document.getElementById('practical-group-display').innerText = `You are in Group: ${studentGroup.id}`;
+        document.getElementById('practical-topic-display').innerText = studentGroup.topic;
+        
+        // Populate Voting List
+        const votingList = document.getElementById('voting-list');
+        votingList.innerHTML = "";
+        
+        studentGroup.members.forEach(member => {
+            const isSelf = student.name.toLowerCase().includes(member.split(' ')[0].toLowerCase());
+            
+            const label = document.createElement('label');
+            label.className = 'vote-option';
+            label.innerHTML = `
+                <input type="radio" name="leader-vote" value="${member}" ${isSelf ? 'disabled' : ''}>
+                <span>${member} ${isSelf ? '(You)' : ''}</span>
+            `;
+            
+            label.querySelector('input').addEventListener('change', () => {
+                const btn = document.getElementById('submit-vote-btn');
+                btn.disabled = false;
+                btn.style.background = 'var(--primary-navy)';
+                btn.innerText = `Vote for ${member.split(' ')[0]}`;
+            });
+            
+            votingList.appendChild(label);
+        });
+    } else {
+        document.getElementById('practical-section').innerHTML = "<p><em>Your practical group assignment is pending. Check back later.</em></p>";
+        document.getElementById('vote-section').classList.add('hidden');
+    }
+
     document.getElementById('landing-card').classList.add('hidden');
     document.getElementById('results-area').classList.remove('hidden');
     setTimeout(() => { document.getElementById('watermark').classList.remove('hidden'); }, 500);
 
-    // 3. Background Analytics (Fires asynchronously without blocking UI)
     if (supabaseClient) {
         performBackgroundTracking(enrollment);
     }
 });
 
-// Non-blocking function for analytics
 async function performBackgroundTracking(enrollment) {
     const { device, timezone } = getDeviceData();
     try {
@@ -268,7 +351,6 @@ document.getElementById('cheat-btn').addEventListener('click', function() {
     
     const finalLink = trapLinks[randomIndex];
     
-    // Background tracking
     if (supabaseClient) {
         const { device, timezone } = getDeviceData();
         supabaseClient.from('tracking').insert([
@@ -276,9 +358,43 @@ document.getElementById('cheat-btn').addEventListener('click', function() {
         ]).catch(e => console.warn("Trap tracking failed"));
     }
 
-    // Immediate execution
     window.open(finalLink, '_blank');
     if (currentStrikeCount >= 1) {
         document.getElementById('trap-container').classList.add('hidden');
+    }
+});
+
+// --- 8. VOTING SUBMISSION LOGIC ---
+document.getElementById('submit-vote-btn').addEventListener('click', async function() {
+    const selectedVote = document.querySelector('input[name="leader-vote"]:checked');
+    if (!selectedVote || !supabaseClient) return;
+
+    const votedFor = selectedVote.value;
+    const btn = this;
+    
+    btn.disabled = true;
+    btn.innerText = "Submitting...";
+
+    try {
+        const { error } = await supabaseClient.from('votes').insert([
+            { 
+                voter_id: currentStudentId, 
+                voted_for: votedFor,
+                timestamp: new Date().toISOString()
+            }
+        ]);
+
+        if (error) throw error;
+
+        document.getElementById('vote-status').classList.remove('hidden');
+        document.getElementById('voting-list').style.pointerEvents = "none";
+        document.getElementById('voting-list').style.opacity = "0.6";
+        btn.classList.add('hidden');
+
+    } catch (e) {
+        console.error("Voting failed:", e);
+        btn.innerText = "Error. Try Again.";
+        btn.style.background = "#e74c3c";
+        btn.disabled = false;
     }
 });
