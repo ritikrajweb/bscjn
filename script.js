@@ -32,57 +32,52 @@ const assignmentTopics = [
     { title: "Culture and Personality School of Thought in Socio-Cultural Anthropology" }
 ];
 
-// --- 2.5 PRACTICAL GROUPS DATA ---
+// --- 2.5 PRACTICAL GROUPS DATA (MAPPED BY ENROLLMENT NUMBER) ---
 const practicalGroups = {
     "G1": { 
         topic: "Navigating Challenges: The Experiences of Working Women in the Workplace", 
-        members: ["Shivangi Sahu", "Shreya Maurya", "Suhani", "Ananya Gautam", "Meghadri Roy", "Prasant Devtalla", "Rudraksh Chouhan", "Rohini Baidh", "Ripunjita Borah", "Panishmita Bag", "Harshita Sahu", "Amarjeet Raikwar"] 
+        members: ["Y25102014", "Y25102015", "Y25102017", "Y25102003", "Y25102006", "Y25102008", "Y25102011", "Y25102010", "Y25102009", "Y25102007", "Y25106014", "Y25101002"] 
     },
     "G2": { 
         topic: "Getting to Know Our Future: A Demographics Profile of Primary School Students", 
-        members: ["Sneha kumari", "Harshita Choubey", "Arya Choubey", "Mahi soni", "Divyansh suryavanshi", "Bindu das", "Kanak chouksey", "Poonam Dixit", "Tejaswini patel", "Mahak Burman", "Sandesh mandeke", "Anand kumar", "Nainsi Soni"] 
+        members: ["Y25109010", "Y25106013", "Y25106010", "Y25106023", "Y25106011", "Y25104006", "Y25109003", "Y25109015", "Y25109019", "Y25109013", "Y25106024", "Y25106001", "Y25109014"] 
     },
     "G3": { 
         topic: "Assessing Traffic Knowledge and Road Safety Awareness Among Bikers in Sagar", 
-        members: ["Adity kumari", "Sonali pani", "Bhoomi Soni", "Shradha raikwar", "Shradha rajput", "Tanisha shilpi", "Seemantani bisen", "Jashoda bhoi", "Abhay pratap Singh Lodhi", "Satyam Adiwashi", "Anjali suryavanshi", "Gopal Dinkar"] 
+        members: ["Y25102002", "Y25102016", "Y25102020", "Y25109009", "Y25102021", "Y25102018", "Y25102013", "Y25102005", "Y25102019", "Y25102012", "Y25105002", "Y25105008"] 
     },
     "G4": { 
         topic: "Traditions Unveiled: An In-Depth Study of Marriage Customs in Sagar", 
-        members: ["Mukti Jeswani", "Kanchan", "Nandini mishra", "Ambika dahiya", "Shalini rawat", "Kaify yusuf", "Catherin joy", "Surbhi dubey", "Khushubu jaiswal", "Sakshi", "Shraddha singh thakur", "Aavni M"] 
-    },
-    "G5": { 
-        topic: "Social Perception of Dowry Among the Residents of Sagar", 
-        members: ["Ashmi chouhan", "Monica Pandey", "Rahiya Shiekh", "Nandani Kurmi", "Mamta Namdeo", "Poornima Dixit", "Anshika Pandey", "Amisha Sharma", "Khushi Prasad", "Kanchi Soni", "Hanshika Kori", "Ragini badholiya"] 
+        members: ["Y25105005", "Y25109004", "Y25105022", "Y25105016", "Y25105015", "Y25105019", "Y25105003", "Y25105001", "Y25105014", "Y25105012", "Y25105010", "Y25109007"] 
     },
     "G6": { 
         topic: "The Socio-Economic Issues Confronting Out-of-State Students at Doctor Harisingh Gour Vishwavidyalaya", 
-        members: ["Nandini mishra", "Kaify Yusuf", "Aavani M", "Catherine joy", "Kanchan", "Mukti jaiswal", "Shalini Rawat", "Ambika dahiya", "Surbhi Dubey", "Khushubu jaiswal", "Shraddha Singh thakur", "Sakshi"] 
+        members: ["Y25106026", "Y25106015", "Y25106002", "Y25106047", "Y25106016", "Y25106043", "Y25106034", "Y25106005", "Y25109021", "Y25109012", "Y25109016", "Y25109008"] 
     },
     "G7": { 
         topic: "Books vs. AI: A Comparative Study of Student Preferences at Doctor Harisingh Gour Vishwavidyalaya", 
-        members: ["Babloo kumar", "Ayushi jain", "Anuj dwivedi", "Priydarshni Dubey", "Payal chourasia", "Aanchal jha", "Vaibhav vishnoi", "Sakshi gautam", "Tanuja tamada", "Jahanvi sour", "Suhani patel", "Neeraj singh"] 
+        members: ["Y25105007", "Y25105006", "Y25105004", "Y25105020", "Y25105018", "Y25102001", "Y25105029", "Y25105024", "Y25105026", "Y25105011", "Y25105032", "Y25105017"] 
     },
     "G8": { 
         topic: "Connecting Cultures: The Impact of Outer Culture on Local Traditions in Sagar", 
-        members: ["Suneet kaur", "Kaushal kumar", "Sneha thakur", "Saksham Jain", "Sudipto Acharjee", "Parth Rawat", "Tanishq Sharma", "Rikansha yashona", "Shambhavi Tiwari", "Ankita patel", "Khushi Mishra", "Pankaj shakya", "Vranda chaurasiya"] 
+        members: ["Y25106038", "Y25106018", "Y25106036", "Y25106045", "Y25106037", "Y25106029", "Y25106039", "Y25106030", "Y25106035", "Y25106007", "Y25106019", "Y25106028", "Y25106042"] 
     },
     "G9": { 
         topic: "Understanding Menstruation Myths and Taboos in Rural vs. Urban Sagar", 
-        members: ["Lavanya Singh", "Lavanya Sharma", "Nandni Sharma", "Kashish Kumari", "Anjali Rai", "Riya Patel", "Aman Rathore", "Tushar Mishra", "Tanuja Chaurasia"] 
+        members: ["Y25106022", "Y25106021", "Y25106027", "Y25106017", "Y25106006", "Y25106031", "Y25106004", "Y25106040", "Y25105027"] 
     },
     "G10": { 
         topic: "Social Perception of Female Feticide Among the Residents of Sagar", 
-        members: ["Gaurav Patel", "Ankush Patel", "Krishna Yadav", "Rampal Ahirwar", "Shivam Jaiswal", "Rohan Ahirwar", "DIVYA PATEL", "RAGNEE PATEL", "ARADHNA PAUL", "JANVI AHIRWAR", "YASHWANT AHIRWAR"] 
+        members: ["Y25106012", "Y25106008", "Y25106020", "Y25105023", "Y25104079", "Y25105031", "Y25105009", "Y25105021", "Y25109001", "Y25109002"] 
     }
 };
 
-function findStudentGroup(studentName) {
-    const cleanName = studentName.toLowerCase().trim();
+// Robust check strictly based on Enrollment Number
+function findStudentGroup(enrollmentNo) {
     for (const [groupId, groupInfo] of Object.entries(practicalGroups)) {
-        const isMember = groupInfo.members.some(member => 
-            cleanName.includes(member.split(' ')[0].toLowerCase())
-        );
-        if (isMember) return { id: groupId, ...groupInfo };
+        if (groupInfo.members.includes(enrollmentNo)) {
+            return { id: groupId, ...groupInfo };
+        }
     }
     return null;
 }
@@ -239,13 +234,13 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
     listDiv.innerHTML = topicsHTML;
 
     // --- Practical & Voting Initialization ---
-    const studentGroup = findStudentGroup(student.name);
+    // Now searching by enrollment ID directly
+    const studentGroup = findStudentGroup(currentStudentId);
     
     if (studentGroup) {
         document.getElementById('practical-group-display').innerText = `You are in Group: ${studentGroup.id}`;
         document.getElementById('practical-topic-display').innerText = studentGroup.topic;
         
-        // 1. Check if user already voted before showing the radio buttons
         let hasVoted = false;
         if (supabaseClient) {
             const { data } = await supabaseClient.from('votes').select('*').eq('voter_id', currentStudentId).single();
@@ -253,31 +248,36 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
         }
 
         if (hasVoted) {
-            // Already voted: Hide voting form, fetch results directly
             document.getElementById('voting-instruction').classList.add('hidden');
             document.getElementById('voting-list').classList.add('hidden');
             document.getElementById('submit-vote-btn').classList.add('hidden');
             fetchAndDisplayResults(studentGroup);
         } else {
-            // Needs to vote: Populate list
             const votingList = document.getElementById('voting-list');
             votingList.innerHTML = "";
             
-            studentGroup.members.forEach(member => {
-                const isSelf = student.name.toLowerCase().includes(member.split(' ')[0].toLowerCase());
+            studentGroup.members.forEach(memberEnrollment => {
+                const isSelf = currentStudentId === memberEnrollment;
+                
+                // Fetch the actual display name from the database
+                const memberData = studentDB[memberEnrollment];
+                const displayName = memberData ? memberData.name : memberEnrollment;
+                const shortName = displayName.split(' ')[0];
                 
                 const label = document.createElement('label');
                 label.className = 'vote-option';
+                
+                // NOTE: We now use the Enrollment Number as the vote value, not the string name!
                 label.innerHTML = `
-                    <input type="radio" name="leader-vote" value="${member}" ${isSelf ? 'disabled' : ''}>
-                    <span>${member} ${isSelf ? '(You)' : ''}</span>
+                    <input type="radio" name="leader-vote" value="${memberEnrollment}" ${isSelf ? 'disabled' : ''}>
+                    <span>${displayName} ${isSelf ? '(You)' : ''}</span>
                 `;
                 
                 label.querySelector('input').addEventListener('change', () => {
                     const btn = document.getElementById('submit-vote-btn');
                     btn.disabled = false;
                     btn.style.background = 'var(--primary-navy)';
-                    btn.innerText = `Vote for ${member.split(' ')[0]}`;
+                    btn.innerText = `Vote for ${shortName}`;
                 });
                 
                 votingList.appendChild(label);
@@ -361,22 +361,20 @@ document.getElementById('submit-vote-btn').addEventListener('click', async funct
     const selectedVote = document.querySelector('input[name="leader-vote"]:checked');
     if (!selectedVote || !supabaseClient) return;
 
-    const votedFor = selectedVote.value;
+    const votedForId = selectedVote.value; // This is now an Enrollment ID
     const btn = this;
     
     btn.disabled = true;
     btn.innerText = "Submitting...";
 
     try {
-        const { error } = await supabaseClient.from('votes').insert([{ voter_id: currentStudentId, voted_for: votedFor, timestamp: new Date().toISOString() }]);
+        const { error } = await supabaseClient.from('votes').insert([{ voter_id: currentStudentId, voted_for: votedForId, timestamp: new Date().toISOString() }]);
         if (error) throw error;
 
-        // Hide voting elements
         document.getElementById('voting-instruction').classList.add('hidden');
         document.getElementById('voting-list').classList.add('hidden');
         btn.classList.add('hidden');
 
-        // Show the Funny Candy Cat Popup
         document.getElementById('funny-popup').classList.remove('hidden');
 
     } catch (e) {
@@ -387,15 +385,12 @@ document.getElementById('submit-vote-btn').addEventListener('click', async funct
     }
 });
 
-// When user closes the funny popup, load the results
 document.getElementById('close-popup-btn').addEventListener('click', () => {
     document.getElementById('funny-popup').classList.add('hidden');
-    const student = studentDB[currentStudentId];
-    const studentGroup = findStudentGroup(student.name);
+    const studentGroup = findStudentGroup(currentStudentId);
     fetchAndDisplayResults(studentGroup);
 });
 
-// Function to fetch votes and calculate absolute majority
 async function fetchAndDisplayResults(group) {
     if (!supabaseClient) return;
     
@@ -404,60 +399,63 @@ async function fetchAndDisplayResults(group) {
     resultsContent.innerHTML = "<p>Loading live results...</p>";
 
     try {
-        // Fetch all votes where the person voted FOR is in this group
+        // Fetch votes using the enrollment IDs
         const { data: groupVotes, error } = await supabaseClient.from('votes').select('voted_for').in('voted_for', group.members);
         if (error) throw error;
 
-        // Tally the votes
         const voteCounts = {};
-        group.members.forEach(m => voteCounts[m] = 0); // Initialize everyone to 0
+        group.members.forEach(m => voteCounts[m] = 0); 
         groupVotes.forEach(v => { voteCounts[v.voted_for] += 1; });
 
-        // Calculate Majority (more than 50% of the ENTIRE group)
         const totalGroupMembers = group.members.length;
         const votesNeededForMajority = Math.floor(totalGroupMembers / 2) + 1;
         
         let highestVotes = 0;
-        let leader = null;
+        let leaderId = null;
         let totalVotesCast = groupVotes.length;
 
-        // Sort members by votes
         const sortedResults = Object.entries(voteCounts).sort((a, b) => b[1] - a[1]);
 
         if (sortedResults.length > 0) {
-            leader = sortedResults[0][0];
+            leaderId = sortedResults[0][0];
             highestVotes = sortedResults[0][1];
         }
 
-        resultsContent.innerHTML = ""; // Clear loading text
+        resultsContent.innerHTML = ""; 
 
         if (highestVotes >= votesNeededForMajority) {
-            // SOMEONE WON! Show Absolute Winner Banner
+            
+            // Map winner ID back to real name
+            const winnerData = studentDB[leaderId];
+            const winnerName = winnerData ? winnerData.name : leaderId;
+            
             document.getElementById('results-title').innerText = "🎉 We have a Group Leader!";
             resultsContent.innerHTML = `
                 <div class="winner-banner">
                     <div style="font-size: 30px; margin-bottom: 5px;">👑</div>
-                    <h4>${leader}</h4>
+                    <h4>${winnerName}</h4>
                     <p style="margin-top: 5px; font-weight: normal; font-size: 14px;">Secured the absolute majority with ${highestVotes} votes.</p>
                 </div>
             `;
         } else {
-            // NO WINNER YET: Show Progress Bars
             document.getElementById('results-title').innerText = `📊 Current Standings (${totalVotesCast}/${totalGroupMembers} Voted)`;
             
-            // Only show top 5 to keep UI clean, or everyone who has at least 1 vote
             let activeCandidates = sortedResults.filter(r => r[1] > 0);
             if (activeCandidates.length === 0) {
                 resultsContent.innerHTML = "<p style='color: #666; font-style: italic;'>No votes cast yet. Be the first!</p>";
                 return;
             }
 
-            activeCandidates.forEach(([name, count]) => {
+            activeCandidates.forEach(([enrollmentId, count]) => {
                 const percentage = (count / totalGroupMembers) * 100;
+                
+                // Map ID back to first name for the progress bar display
+                const memberData = studentDB[enrollmentId];
+                const displayName = memberData ? memberData.name.split(' ')[0] : enrollmentId;
                 
                 resultsContent.innerHTML += `
                     <div class="result-bar-container">
-                        <div class="result-name">${name.split(' ')[0]}</div>
+                        <div class="result-name">${displayName}</div>
                         <div class="result-bar-wrapper">
                             <div class="result-bar" style="width: ${percentage}%"></div>
                         </div>
