@@ -72,7 +72,7 @@ const practicalGroups = {
     },
     "G10": { 
         topic: "Social Perception of Female Feticide Among the Residents of Sagar", 
-        members: ["Gaurav Patel", "Ankush Patel", "Krishna Yadav", "Rampal Ahirwar", "Shivam Jaiswal", "Rohan Ahirwar"] 
+        members: ["Gaurav Patel", "Ankush Patel", "Krishna Yadav", "Rampal Ahirwar", "Shivam Jaiswal", "Rohan Ahirwar", "DIVYA PATEL", "RAGNEE PATEL", "ARADHNA PAUL", "JANVI AHIRWAR", "YASHWANT AHIRWAR"] 
     }
 };
 
