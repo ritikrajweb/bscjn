@@ -44,7 +44,7 @@ const practicalGroups = {
     },
     "G3": { 
         topic: "Assessing Traffic Knowledge and Road Safety Awareness Among Bikers in Sagar", 
-        members: ["Y25102002", "Y25102016", "Y25102020", "Y25109009", "Y25102021", "Y25102018", "Y25102013", "Y25102005", "Y25102019", "Y25102012", "Y25105002", "Y25105008"] 
+        members: ["Y25102002", "Y25102016", "Y25102020", "Y25109009", "Y25102021", "Y25102018", "Y25102013", "Y25102005", "Y25102019", "Y25102012", "Y25105002", "Y25105008", "Y25109002"] 
     },
     "G4": { 
         topic: "Traditions Unveiled: An In-Depth Study of Marriage Customs in Sagar", 
@@ -68,7 +68,7 @@ const practicalGroups = {
     },
     "G10": { 
         topic: "Social Perception of Female Feticide Among the Residents of Sagar", 
-        members: ["Y25106012", "Y25106008", "Y25106020", "Y25105023", "Y25104079", "Y25105031", "Y25105009", "Y25105021", "Y25109001", "Y25109002"] 
+        members: ["Y25106012", "Y25106008", "Y25106020", "Y25105023", "Y25104079", "Y25105031", "Y25105009", "Y25105021", "Y25109001"] 
     }
 };
 
