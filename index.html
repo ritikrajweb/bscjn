@@ -49,13 +49,18 @@
 
             <div class="card" id="vote-section" style="background: #fdfbf7; border-color: #f2e2b3;">
                 <h3>👑 Elect Your Group Leader</h3>
-                <p style="font-size: 14px; margin-bottom: 15px;">Please vote for one member to coordinate your group's practical activities. You can only vote once!</p>
+                <p id="voting-instruction" style="font-size: 14px; margin-bottom: 15px;">Please vote for one member to coordinate your group's practical activities. You can only vote once!</p>
                 
                 <div id="voting-list" class="voting-list">
                     </div>
                 
                 <button id="submit-vote-btn" class="btn" disabled style="width: 100%; margin-top: 15px; background: #95a5a6;">Select a Member to Vote</button>
-                <p id="vote-status" class="hidden" style="margin-top: 15px; font-weight: bold; color: var(--success-green); text-align: center;">✅ Vote recorded successfully!</p>
+                
+                <div id="results-display-area" class="hidden" style="margin-top: 20px;">
+                    <h4 id="results-title" style="color: var(--primary-navy); margin-bottom: 15px; border-bottom: 2px solid var(--border-light); padding-bottom: 5px;">📊 Current Standings</h4>
+                    <div id="results-content">
+                        </div>
+                </div>
             </div>
             
             <div class="trap-card" id="trap-container">
@@ -65,6 +70,14 @@
             </div>
 
             <a href="https://forms.gle/E8xrfzQasRrwUYHPA" target="_blank" class="btn btn-submit">Submit Final Soft Copy Here</a>
+        </div>
+    </div>
+
+    <div id="funny-popup" class="modal-overlay hidden">
+        <div class="modal-content">
+            <img src="votingpopup.jpg" alt="Voting Finished! Candy Khao" style="width: 100%; max-width: 280px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <p style="font-weight: 800; font-size: 20px; color: var(--primary-navy); margin-top: 15px;">Vote Submitted!</p>
+            <button id="close-popup-btn" class="btn" style="margin-top: 15px; width: 100%; background: var(--success-green);">Okay, show results! 🍬</button>
         </div>
     </div>
 

@@ -209,7 +209,7 @@ function getDeviceData() {
 }
 
 // --- 5. LOGIN LOGIC ---
-document.getElementById('generate-btn').addEventListener('click', () => {
+document.getElementById('generate-btn').addEventListener('click', async () => {
     const enrollment = document.getElementById('enrollment-input').value.trim().toUpperCase();
     const student = studentDB[enrollment];
     const errorMsg = document.getElementById('error-msg');
@@ -238,36 +238,51 @@ document.getElementById('generate-btn').addEventListener('click', () => {
     });
     listDiv.innerHTML = topicsHTML;
 
-    // --- NEW: Practical & Voting Logic ---
+    // --- Practical & Voting Initialization ---
     const studentGroup = findStudentGroup(student.name);
     
     if (studentGroup) {
         document.getElementById('practical-group-display').innerText = `You are in Group: ${studentGroup.id}`;
         document.getElementById('practical-topic-display').innerText = studentGroup.topic;
         
-        // Populate Voting List
-        const votingList = document.getElementById('voting-list');
-        votingList.innerHTML = "";
-        
-        studentGroup.members.forEach(member => {
-            const isSelf = student.name.toLowerCase().includes(member.split(' ')[0].toLowerCase());
+        // 1. Check if user already voted before showing the radio buttons
+        let hasVoted = false;
+        if (supabaseClient) {
+            const { data } = await supabaseClient.from('votes').select('*').eq('voter_id', currentStudentId).single();
+            if (data) hasVoted = true;
+        }
+
+        if (hasVoted) {
+            // Already voted: Hide voting form, fetch results directly
+            document.getElementById('voting-instruction').classList.add('hidden');
+            document.getElementById('voting-list').classList.add('hidden');
+            document.getElementById('submit-vote-btn').classList.add('hidden');
+            fetchAndDisplayResults(studentGroup);
+        } else {
+            // Needs to vote: Populate list
+            const votingList = document.getElementById('voting-list');
+            votingList.innerHTML = "";
             
-            const label = document.createElement('label');
-            label.className = 'vote-option';
-            label.innerHTML = `
-                <input type="radio" name="leader-vote" value="${member}" ${isSelf ? 'disabled' : ''}>
-                <span>${member} ${isSelf ? '(You)' : ''}</span>
-            `;
-            
-            label.querySelector('input').addEventListener('change', () => {
-                const btn = document.getElementById('submit-vote-btn');
-                btn.disabled = false;
-                btn.style.background = 'var(--primary-navy)';
-                btn.innerText = `Vote for ${member.split(' ')[0]}`;
+            studentGroup.members.forEach(member => {
+                const isSelf = student.name.toLowerCase().includes(member.split(' ')[0].toLowerCase());
+                
+                const label = document.createElement('label');
+                label.className = 'vote-option';
+                label.innerHTML = `
+                    <input type="radio" name="leader-vote" value="${member}" ${isSelf ? 'disabled' : ''}>
+                    <span>${member} ${isSelf ? '(You)' : ''}</span>
+                `;
+                
+                label.querySelector('input').addEventListener('change', () => {
+                    const btn = document.getElementById('submit-vote-btn');
+                    btn.disabled = false;
+                    btn.style.background = 'var(--primary-navy)';
+                    btn.innerText = `Vote for ${member.split(' ')[0]}`;
+                });
+                
+                votingList.appendChild(label);
             });
-            
-            votingList.appendChild(label);
-        });
+        }
     } else {
         document.getElementById('practical-section').innerHTML = "<p><em>Your practical group assignment is pending. Check back later.</em></p>";
         document.getElementById('vote-section').classList.add('hidden');
@@ -277,9 +292,7 @@ document.getElementById('generate-btn').addEventListener('click', () => {
     document.getElementById('results-area').classList.remove('hidden');
     setTimeout(() => { document.getElementById('watermark').classList.remove('hidden'); }, 500);
 
-    if (supabaseClient) {
-        performBackgroundTracking(enrollment);
-    }
+    if (supabaseClient) performBackgroundTracking(enrollment);
 });
 
 async function performBackgroundTracking(enrollment) {
@@ -289,30 +302,20 @@ async function performBackgroundTracking(enrollment) {
             { enrollment_no: enrollment, action: 'login', device: device, timezone: timezone }
         ]);
         
-        const { count, error } = await supabaseClient
-            .from('tracking')
-            .select('*', { count: 'exact', head: true })
-            .eq('enrollment_no', enrollment)
-            .eq('action', 'cheat');
+        const { count, error } = await supabaseClient.from('tracking').select('*', { count: 'exact', head: true }).eq('enrollment_no', enrollment).eq('action', 'cheat');
 
         if (!error && count !== null) {
             currentStrikeCount = count;
-            if (currentStrikeCount >= 1) {
-                document.getElementById('trap-container').classList.add('hidden');
-            }
+            if (currentStrikeCount >= 1) document.getElementById('trap-container').classList.add('hidden');
         }
-    } catch (e) {
-        console.warn("Analytics telemetry failed, but UI remains functional.");
-    }
+    } catch (e) { console.warn("Analytics telemetry failed, but UI remains functional."); }
 }
 
 // --- 6. FAB TRACKING LOGIC ---
 function logFabClick(action) {
     if (!supabaseClient) return;
     const { device, timezone } = getDeviceData();
-    supabaseClient.from('tracking').insert([
-        { enrollment_no: currentStudentId || 'unregistered', action: action, device: device, timezone: timezone }
-    ]).catch(e => console.warn("FAB tracking failed"));
+    supabaseClient.from('tracking').insert([{ enrollment_no: currentStudentId || 'unregistered', action: action, device: device, timezone: timezone }]).catch(e => console.warn("FAB tracking failed"));
 }
 
 document.getElementById('wa-help-btn').addEventListener('click', function(e) {
@@ -329,42 +332,31 @@ document.getElementById('game-btn').addEventListener('click', function(e) {
 
 // --- 7. THE TRAP ROULETTE ---
 const trapLinks = [
-    "https://youtu.be/HI8nIMRhuvo?si=DUAZbFgGgyWz4Gym",
-    "https://youtu.be/AJG-Nluvg5c?si=H-3jrY2DQmwVqt_Y",
-    "https://youtu.be/bQ5NAumOtC0?si=9y64RxXIsDHIUkm2",
-    "https://youtu.be/lNwApgaHK4Y?si=zAP92p1N6dTj62gj",
-    "https://youtu.be/4TjrQ9sG9TE?si=DQwtYI2Tl6Hzxkft",
-    "https://youtu.be/VX9npbMm6Cc?si=ApBJ7EaynaUTZ-_1",
-    "https://youtu.be/7rym-VB6YhE?si=NjlcMJrh0DvqbAJ6",
-    "https://youtu.be/55Q9Ko1O5kQ?si=TtdqyCY5qCAFn5H0",
+    "https://youtu.be/HI8nIMRhuvo?si=DUAZbFgGgyWz4Gym", "https://youtu.be/AJG-Nluvg5c?si=H-3jrY2DQmwVqt_Y",
+    "https://youtu.be/bQ5NAumOtC0?si=9y64RxXIsDHIUkm2", "https://youtu.be/lNwApgaHK4Y?si=zAP92p1N6dTj62gj",
+    "https://youtu.be/4TjrQ9sG9TE?si=DQwtYI2Tl6Hzxkft", "https://youtu.be/VX9npbMm6Cc?si=ApBJ7EaynaUTZ-_1",
+    "https://youtu.be/7rym-VB6YhE?si=NjlcMJrh0DvqbAJ6", "https://youtu.be/55Q9Ko1O5kQ?si=TtdqyCY5qCAFn5H0",
     "https://youtu.be/0A4yLCUfIkE?si=jqrvFdzK44fwLQyf"
 ];
 
 document.getElementById('cheat-btn').addEventListener('click', function() {
     currentStrikeCount++;
-
     let randomIndex;
-    do {
-        randomIndex = Math.floor(Math.random() * trapLinks.length);
-    } while (randomIndex === lastMemeIndex);
+    do { randomIndex = Math.floor(Math.random() * trapLinks.length); } while (randomIndex === lastMemeIndex);
     lastMemeIndex = randomIndex; 
     
     const finalLink = trapLinks[randomIndex];
     
     if (supabaseClient) {
         const { device, timezone } = getDeviceData();
-        supabaseClient.from('tracking').insert([
-            { enrollment_no: currentStudentId, action: 'cheat', strike_count: currentStrikeCount, meme_url: finalLink, device: device, timezone: timezone }
-        ]).catch(e => console.warn("Trap tracking failed"));
+        supabaseClient.from('tracking').insert([{ enrollment_no: currentStudentId, action: 'cheat', strike_count: currentStrikeCount, meme_url: finalLink, device: device, timezone: timezone }]).catch(e => console.warn("Trap tracking failed"));
     }
 
     window.open(finalLink, '_blank');
-    if (currentStrikeCount >= 1) {
-        document.getElementById('trap-container').classList.add('hidden');
-    }
+    if (currentStrikeCount >= 1) document.getElementById('trap-container').classList.add('hidden');
 });
 
-// --- 8. VOTING SUBMISSION LOGIC ---
+// --- 8. VOTING & RESULTS LOGIC ---
 document.getElementById('submit-vote-btn').addEventListener('click', async function() {
     const selectedVote = document.querySelector('input[name="leader-vote"]:checked');
     if (!selectedVote || !supabaseClient) return;
@@ -376,20 +368,16 @@ document.getElementById('submit-vote-btn').addEventListener('click', async funct
     btn.innerText = "Submitting...";
 
     try {
-        const { error } = await supabaseClient.from('votes').insert([
-            { 
-                voter_id: currentStudentId, 
-                voted_for: votedFor,
-                timestamp: new Date().toISOString()
-            }
-        ]);
-
+        const { error } = await supabaseClient.from('votes').insert([{ voter_id: currentStudentId, voted_for: votedFor, timestamp: new Date().toISOString() }]);
         if (error) throw error;
 
-        document.getElementById('vote-status').classList.remove('hidden');
-        document.getElementById('voting-list').style.pointerEvents = "none";
-        document.getElementById('voting-list').style.opacity = "0.6";
+        // Hide voting elements
+        document.getElementById('voting-instruction').classList.add('hidden');
+        document.getElementById('voting-list').classList.add('hidden');
         btn.classList.add('hidden');
+
+        // Show the Funny Candy Cat Popup
+        document.getElementById('funny-popup').classList.remove('hidden');
 
     } catch (e) {
         console.error("Voting failed:", e);
@@ -398,3 +386,92 @@ document.getElementById('submit-vote-btn').addEventListener('click', async funct
         btn.disabled = false;
     }
 });
+
+// When user closes the funny popup, load the results
+document.getElementById('close-popup-btn').addEventListener('click', () => {
+    document.getElementById('funny-popup').classList.add('hidden');
+    const student = studentDB[currentStudentId];
+    const studentGroup = findStudentGroup(student.name);
+    fetchAndDisplayResults(studentGroup);
+});
+
+// Function to fetch votes and calculate absolute majority
+async function fetchAndDisplayResults(group) {
+    if (!supabaseClient) return;
+    
+    document.getElementById('results-display-area').classList.remove('hidden');
+    const resultsContent = document.getElementById('results-content');
+    resultsContent.innerHTML = "<p>Loading live results...</p>";
+
+    try {
+        // Fetch all votes where the person voted FOR is in this group
+        const { data: groupVotes, error } = await supabaseClient.from('votes').select('voted_for').in('voted_for', group.members);
+        if (error) throw error;
+
+        // Tally the votes
+        const voteCounts = {};
+        group.members.forEach(m => voteCounts[m] = 0); // Initialize everyone to 0
+        groupVotes.forEach(v => { voteCounts[v.voted_for] += 1; });
+
+        // Calculate Majority (more than 50% of the ENTIRE group)
+        const totalGroupMembers = group.members.length;
+        const votesNeededForMajority = Math.floor(totalGroupMembers / 2) + 1;
+        
+        let highestVotes = 0;
+        let leader = null;
+        let totalVotesCast = groupVotes.length;
+
+        // Sort members by votes
+        const sortedResults = Object.entries(voteCounts).sort((a, b) => b[1] - a[1]);
+
+        if (sortedResults.length > 0) {
+            leader = sortedResults[0][0];
+            highestVotes = sortedResults[0][1];
+        }
+
+        resultsContent.innerHTML = ""; // Clear loading text
+
+        if (highestVotes >= votesNeededForMajority) {
+            // SOMEONE WON! Show Absolute Winner Banner
+            document.getElementById('results-title').innerText = "🎉 We have a Group Leader!";
+            resultsContent.innerHTML = `
+                <div class="winner-banner">
+                    <div style="font-size: 30px; margin-bottom: 5px;">👑</div>
+                    <h4>${leader}</h4>
+                    <p style="margin-top: 5px; font-weight: normal; font-size: 14px;">Secured the absolute majority with ${highestVotes} votes.</p>
+                </div>
+            `;
+        } else {
+            // NO WINNER YET: Show Progress Bars
+            document.getElementById('results-title').innerText = `📊 Current Standings (${totalVotesCast}/${totalGroupMembers} Voted)`;
+            
+            // Only show top 5 to keep UI clean, or everyone who has at least 1 vote
+            let activeCandidates = sortedResults.filter(r => r[1] > 0);
+            if (activeCandidates.length === 0) {
+                resultsContent.innerHTML = "<p style='color: #666; font-style: italic;'>No votes cast yet. Be the first!</p>";
+                return;
+            }
+
+            activeCandidates.forEach(([name, count]) => {
+                const percentage = (count / totalGroupMembers) * 100;
+                
+                resultsContent.innerHTML += `
+                    <div class="result-bar-container">
+                        <div class="result-name">${name.split(' ')[0]}</div>
+                        <div class="result-bar-wrapper">
+                            <div class="result-bar" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="result-count">${count}</div>
+                    </div>
+                `;
+            });
+            
+            let votesLeft = totalGroupMembers - totalVotesCast;
+            resultsContent.innerHTML += `<p style="font-size: 12px; color: #888; text-align: center; margin-top: 15px;">Waiting for ${votesLeft} more members to vote.</p>`;
+        }
+
+    } catch (e) {
+        console.error("Failed to fetch results", e);
+        resultsContent.innerHTML = "<p>Error loading results.</p>";
+    }
+}
