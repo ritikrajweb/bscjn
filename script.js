@@ -68,7 +68,7 @@ const practicalGroups = {
     },
     "G10": { 
         topic: "Social Perception of Female Feticide Among the Residents of Sagar", 
-        members: ["Y25106012", "Y25106008", "Y25106020", "Y25105023", "Y25104079", "Y25105031", "Y25105009", "Y25105021", "Y25109001"] 
+        members: ["Y25106012", "Y25106008", "Y25106020", "Y25105023", "Y25104079", "Y25105031", "Y25105009", "Y25105021", "Y25109001", "Y25109020"] 
     }
 };
 
