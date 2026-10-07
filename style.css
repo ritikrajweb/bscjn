@@ -131,71 +131,39 @@ input[type="text"]:focus, select:focus { border-color: var(--primary-navy); box-
 .watermark:hover .hindi-name { transform: scale(1.1) rotate(-3deg); }
 @keyframes floatUp { to { opacity: 1; transform: translateY(0); } }
 
+/* Floating WhatsApp Button */
+.whatsapp-fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #25D366;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1000;
+    text-decoration: none;
+}
+.whatsapp-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+.whatsapp-fab svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+}
+
 @media (max-width: 600px) { 
     body { padding: 0 15px; margin: 20px auto; } 
     .card { padding: 25px 20px; } 
     .input-group { flex-direction: column; } 
     .btn { width: 100%; } 
-}
-
-/* Vertically Expanding FAB Menu */
-.fab-container { 
-    position: fixed; 
-    bottom: 30px; 
-    right: 30px; 
-    display: flex; 
-    flex-direction: column-reverse; 
-    align-items: center; 
-    gap: 15px; 
-    z-index: 1000; 
-}
-.fab-options { 
-    display: flex; 
-    flex-direction: column-reverse; 
-    align-items: center; 
-    gap: 15px; 
-    opacity: 0; 
-    visibility: hidden; 
-    transform: translateY(20px); 
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-}
-.fab-container:hover .fab-options { opacity: 1; visibility: visible; transform: translateY(0); }
-.fab-main { 
-    background: var(--primary-navy); 
-    color: white; 
-    width: 60px; 
-    height: 60px; 
-    border-radius: 50%; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    box-shadow: 0 4px 15px rgba(0, 33, 71, 0.4); 
-    cursor: pointer; 
-    transition: transform 0.3s; 
-}
-.fab-main svg { width: 32px; height: 32px; fill: white; transition: transform 0.3s; }
-.fab-container:hover .fab-main svg { transform: rotate(45deg); }
-.fab-item { 
-    width: 50px; 
-    height: 50px; 
-    border-radius: 50%; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
-    cursor: pointer; 
-    transition: transform 0.2s; 
-    background: white; 
-    text-decoration: none; 
-}
-.fab-item:hover { transform: scale(1.1); }
-.whatsapp-fab { background-color: #25D366; }
-.whatsapp-fab svg { width: 28px; height: 28px; fill: white; }
-.game-fab { background-color: #fadd63; overflow: hidden; }
-.game-fab img { width: 100%; height: 100%; object-fit: contain; transform: scale(1.4); }
-
-@media (max-width: 600px) { 
-    .fab-container { bottom: 20px; right: 20px; } 
-    .fab-main { width: 55px; height: 55px; } 
-    .fab-item { width: 45px; height: 45px; } 
+    .whatsapp-fab { bottom: 20px; right: 20px; width: 55px; height: 55px; } 
+    .whatsapp-fab svg { width: 28px; height: 28px; }
 }

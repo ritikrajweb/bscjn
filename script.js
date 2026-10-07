@@ -350,7 +350,7 @@ async function performBackgroundTracking(enrollment, actionType) {
 }
 
 // ==========================================
-// 8. DYNAMIC WHATSAPP & GAME FLOATING BUTTONS
+// 8. DYNAMIC WHATSAPP FLOATING BUTTON
 // ==========================================
 document.getElementById('wa-help-btn').addEventListener('click', function(e) {
     e.preventDefault(); 
@@ -359,19 +359,11 @@ document.getElementById('wa-help-btn').addEventListener('click', function(e) {
     
     let message = "";
     if (currentStudentId && currentStudentName) {
-        // Authenticated / Logged in student
         message = `Hi Ritik, I am ${currentStudentName} (${currentStudentId}), and I need help with the ANT-DSM-311 assignment.`;
     } else {
-        // Unauthenticated / Landing screen
         message = `Hey, I am facing a problem accessing the assignment hub. Here is my issue: `;
     }
 
     const waUrl = `https://wa.me/918986937029?text=${encodeURIComponent(message)}`;
     window.open(waUrl, '_blank');
-});
-
-document.getElementById('game-btn').addEventListener('click', function(e) {
-    e.preventDefault(); 
-    if (supabaseClient) performBackgroundTracking(currentStudentId || 'unregistered', 'game');
-    window.open('https://ritikspin.onrender.com', '_blank');
 });
