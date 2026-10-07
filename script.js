@@ -41,7 +41,6 @@ const studentDB = {
     "Y25120018": { name: "Abhiyant Singh Thakur", course: "B.A.", topics: [3, 10] },
     "Y25120029": { name: "Aishanya Singh Thakur", course: "B.A.", topics: [4, 11] },
     "Y25120047": { name: "Anamika Thakur", course: "B.A.", topics: [5, 12] },
-    "Y25120065": { name: "Anokhi Jain", course: "B.A.", topics: [6, 13] },
     "Y25120068": { name: "Anshika Singh", course: "B.A.", topics: [7, 0] },
     "Y25120079": { name: "Anushka Nema", course: "B.A.", topics: [8, 1] },
     "Y25120106": { name: "Bharti Raikwar", course: "B.A.", topics: [9, 2] },
@@ -84,7 +83,6 @@ const studentDB = {
     "Y25120640": { name: "Radhika Thakur", course: "B.A.", topics: [4, 0] },
     "Y25120642": { name: "Ramji Tiwari", course: "B.A.", topics: [5, 1] },
     "Y25120654": { name: "Satyam Jain", course: "B.A.", topics: [6, 2] },
-    "Y25120655": { name: "Sejal Jain", course: "B.A.", topics: [7, 3] },
     "Y25120662": { name: "Surya Kesharwani", course: "B.A.", topics: [8, 4] },
     "Y25130036": { name: "Kajal Ahirwar", course: "B.A.", topics: [9, 5] },
     "Y25130063": { name: "Ravindra Singh Yadav", course: "B.A.", topics: [10, 6] },
@@ -93,7 +91,6 @@ const studentDB = {
 
     // --- B.Sc. III-SEMESTER STUDENTS ---
     "Y25101002": { name: "Amarjeet Raikwar", course: "B.Sc.", topics: [13, 9] },
-    "Y25102001": { name: "Aanchal Shyamanand Jha", course: "B.Sc.", topics: [0, 12] },
     "Y25102002": { name: "Adity kumari", course: "B.Sc.", topics: [1, 13] },
     "Y25102003": { name: "Ananya Gautam", course: "B.Sc.", topics: [2, 0] },
     "Y25102005": { name: "Jashoda Bhoi", course: "B.Sc.", topics: [3, 1] },
@@ -116,7 +113,6 @@ const studentDB = {
     "Y25104006": { name: "Bindu shree das", course: "B.Sc.", topics: [6, 8] },
     "Y25104079": { name: "Shivam Jaiswal", course: "B.Sc.", topics: [7, 9] },
     "Y25105001": { name: "AMISHA KUMARI SHARMA", course: "B.Sc.", topics: [8, 10] },
-    "Y25105002": { name: "Anjali suryavanshi", course: "B.Sc.", topics: [9, 11] },
     "Y25105003": { name: "Anshika Pandey", course: "B.Sc.", topics: [10, 12] },
     "Y25105004": { name: "Anuj Dwivedi", course: "B.Sc.", topics: [11, 13] },
     "Y25105005": { name: "ASHMI CHOUHAN", course: "B.Sc.", topics: [12, 0] },
