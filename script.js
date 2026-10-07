@@ -1,200 +1,210 @@
-// --- 1. SUPABASE CONFIGURATION ---
-// Note: Ensure your Supabase table 'votes' is created to make the voting system work!
-const SUPABASE_URL = 'https://sdslegoqhygfziqwqxrk.supabase.co'; 
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkc2xlZ29xaHlnZnppcXdxeHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4Njc1MzUsImV4cCI6MjA5MDQ0MzUzNX0.A3PER_vjw7-uSb3XY8fv4yZARhh84XhQtVlJvzSXnwI';
+// ==========================================
+// 1. SUPABASE CONFIGURATION
+// ==========================================
+// IMPORTANT: Replace these with your new Sem 3 Supabase credentials
+const SUPABASE_URL = 'https://moxeoqdsaxwlbeceduwh.supabase.co'; 
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1veGVvcWRzYXh3bGJlY2VkdXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzNDM2NTQsImV4cCI6MjEwNjkxOTY1NH0.qTqGLBFHVgobTIgZnlSvsI5okWhS-ueEXHL1cI6tmLg';
 
 let supabaseClient = null;
 
-if (typeof window.supabase !== 'undefined') {
+if (typeof window.supabase !== 'undefined' && SUPABASE_URL !== 'https://moxeoqdsaxwlbeceduwh.supabase.co') {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 } else {
-    console.warn("Database connection blocked by client network/browser. Running in offline UI mode.");
+    console.warn("Database connection running in client mode.");
 }
 
-// --- 2. THE 20 B.Sc. SOCIO-CULTURAL TOPICS ---
+// ==========================================
+// 2. ANT-DSM-311 ASSIGNMENT TOPICS (14 Topics)
+// ==========================================
 const assignmentTopics = [
-    { title: "What is Socio-Cultural Anthropology and describe its classification" },
-    { title: "Scope and Relevance of Socio-cultural Anthropology" },
-    { title: "Relationship of Socio-cultural Anthropology with other Disciplines" },
-    { title: "What are Society and Culture and how are they connected?" },
-    { title: "Concept of Society, Institution and Organization" },
-    { title: "Concept of Status and Role in Society" },
-    { title: "Social Stratification: Concepts and Types" },
-    { title: "Culture Element, Culture Trait, Culture Complex, and Culture Pattern" },
-    { title: "Cultural Integration and Cultural Universals" },
-    { title: "Processes of Culture Change: Acculturation and Transculturation" },
-    { title: "Social Institutions: Family and Marriage" },
-    { title: "Kinship Systems and Organization" },
-    { title: "Religion from an Anthropological Perspective" },
-    { title: "Economic and Political Organization in Anthropology" },
-    { title: "Theories of Cultural Evolution: Diffusionism" },
-    { title: "Theories of Cultural Evolution: Functionalism and Structuralism" },
-    { title: "Culture and Personality School of Thought in Socio-Cultural Anthropology" }
+    { title: "Archaeological Anthropology: Meaning, Scope and Relevance. Concept" },
+    { title: "Prehistory, Proto-History and History." },
+    { title: "The Relationship of Archaeology with other disciplines" },
+    { title: "Methods of Dating: Relative and Absolute Dating" },
+    { title: "Great Ice Age. Evidence of Quaternary Ice Age: River Terrace, Moraines, Eustatic Fluctuations Etc." },
+    { title: "Pluviation and Inter Pluviation" },
+    { title: "Lower Palaeolithic Cultures of Europe (Abbevillian, Acheulian, Clactonian, Levalloisian and India (Soan)" },
+    { title: "Middle Palaeolithic Culture of Europe (Mousterian)" },
+    { title: "Upper Palaeolithic cultures, Home and Cave Art" },
+    { title: "Mesolithic Cultures of Europe and Corresponding Stone Age Industries in India" },
+    { title: "Chief Features of Neolithic Revolution, Emergence of Human Settlements and Farming" },
+    { title: "Metal Age: Chalcolithic culture" },
+    { title: "The Chief Characteristics and Decay of Indus Valley Civilization." },
+    { title: "Definition and Types of Megaliths, Distribution and Main Characteristics of Indian Megaliths." }
 ];
 
-// --- 2.5 PRACTICAL GROUPS DATA (MAPPED BY ENROLLMENT NUMBER) ---
-const practicalGroups = {
-    "G1": { 
-        topic: "Navigating Challenges: The Experiences of Working Women in the Workplace", 
-        members: ["Y25102014", "Y25102015", "Y25102017", "Y25102003", "Y25102006", "Y25102008", "Y25102011", "Y25102010", "Y25102009", "Y25102007", "Y25106014", "Y25101002"] 
-    },
-    "G2": { 
-        topic: "Getting to Know Our Future: A Demographics Profile of Primary School Students", 
-        members: ["Y25109010", "Y25106013", "Y25106010", "Y25106023", "Y25106011", "Y25104006", "Y25109003", "Y25109015", "Y25109019", "Y25109013", "Y25106024", "Y25106001", "Y25109014"] 
-    },
-    "G3": { 
-        topic: "Assessing Traffic Knowledge and Road Safety Awareness Among Bikers in Sagar", 
-        members: ["Y25102002", "Y25102016", "Y25102020", "Y25109009", "Y25102021", "Y25102018", "Y25102013", "Y25102005", "Y25102019", "Y25102012", "Y25105002", "Y25105008", "Y25109002"] 
-    },
-    "G4": { 
-        topic: "Traditions Unveiled: An In-Depth Study of Marriage Customs in Sagar", 
-        members: ["Y25105005", "Y25109004", "Y25105022", "Y25105016", "Y25105015", "Y25105019", "Y25105003", "Y25105001", "Y25105014", "Y25105012", "Y25105010", "Y25109007"] 
-    },
-    "G6": { 
-        topic: "The Socio-Economic Issues Confronting Out-of-State Students at Doctor Harisingh Gour Vishwavidyalaya", 
-        members: ["Y25106026", "Y25106015", "Y25106002", "Y25106047", "Y25106016", "Y25106043", "Y25106034", "Y25106005", "Y25109021", "Y25109012", "Y25109016", "Y25109008"] 
-    },
-    "G7": { 
-        topic: "Books vs. AI: A Comparative Study of Student Preferences at Doctor Harisingh Gour Vishwavidyalaya", 
-        members: ["Y25105007", "Y25105006", "Y25105004", "Y25105020", "Y25105018", "Y25102001", "Y25105029", "Y25105024", "Y25105026", "Y25105011", "Y25105032", "Y25105017"] 
-    },
-    "G8": { 
-        topic: "Connecting Cultures: The Impact of Outer Culture on Local Traditions in Sagar", 
-        members: ["Y25106038", "Y25106018", "Y25106036", "Y25106045", "Y25106037", "Y25106029", "Y25106039", "Y25106030", "Y25106035", "Y25106007", "Y25106019", "Y25106028", "Y25106042"] 
-    },
-    "G9": { 
-        topic: "Understanding Menstruation Myths and Taboos in Rural vs. Urban Sagar", 
-        members: ["Y25106022", "Y25106021", "Y25106027", "Y25106017", "Y25106006", "Y25106031", "Y25106004", "Y25106040", "Y25105027"] 
-    },
-    "G10": { 
-        topic: "Social Perception of Female Feticide Among the Residents of Sagar", 
-        members: ["Y25106012", "Y25106008", "Y25106020", "Y25105023", "Y25104079", "Y25105031", "Y25105009", "Y25105021", "Y25109001", "Y25109020"] 
-    }
-};
-
-// Robust check strictly based on Enrollment Number
-function findStudentGroup(enrollmentNo) {
-    for (const [groupId, groupInfo] of Object.entries(practicalGroups)) {
-        if (groupInfo.members.includes(enrollmentNo)) {
-            return { id: groupId, ...groupInfo };
-        }
-    }
-    return null;
-}
-
-// --- 3. B.Sc. STUDENT DATABASE ---
+// ==========================================
+// 3. FULL STUDENT DATABASE (B.A. & B.Sc.)
+// ==========================================
 const studentDB = {
-    "Y25101002": { "name": "AMARJEET RAIKWAR", "course": "B.Sc.", "topics": [2, 14] },
-    "Y25102001": { "name": "AANCHAL SHYAMANAND JHA", "course": "B.Sc.", "topics": [1, 7] },
-    "Y25102002": { "name": "ADITY KUMARI", "course": "B.Sc.", "topics": [2, 7] },
-    "Y25102003": { "name": "ANANYA GAUTAM", "course": "B.Sc.", "topics": [3, 8] },
-    "Y25102005": { "name": "JASHODA BHOI", "course": "B.Sc.", "topics": [4, 10] },
-    "Y25102006": { "name": "MEGHADRI ROY", "course": "B.Sc.", "topics": [5, 11] },
-    "Y25102007": { "name": "PANISMITA BAG", "course": "B.Sc.", "topics": [6, 12] },
-    "Y25102008": { "name": "PRASANT DEVTALLA", "course": "B.Sc.", "topics": [7, 13] },
-    "Y25102009": { "name": "RIPUNJITA BORAH", "course": "B.Sc.", "topics": [4, 9] },
-    "Y25102010": { "name": "ROHINI BAIDH", "course": "B.Sc.", "topics": [8, 14] },
-    "Y25102011": { "name": "RUDRAKSH CHOUHAN", "course": "B.Sc.", "topics": [9, 15] },
-    "Y25102012": { "name": "SATYAM ADIWASHI", "course": "B.Sc.", "topics": [7, 12] },
-    "Y25102013": { "name": "SEEMANTNI BISEN", "course": "B.Sc.", "topics": [11, 0] },
-    "Y25102014": { "name": "SHIVANGI SAHU", "course": "B.Sc.", "topics": [12, 1] },
-    "Y25102015": { "name": "SHREYA MOURYA", "course": "B.Sc.", "topics": [13, 2] },
-    "Y25102016": { "name": "SONALI PANI", "course": "B.Sc.", "topics": [14, 3] },
-    "Y25102017": { "name": "SUHANI", "course": "B.Sc.", "topics": [4, 11] },
-    "Y25102018": { "name": "TANISHA SHILPI", "course": "B.Sc.", "topics": [15, 4] },
-    "Y25102019": { "name": "ABHAY PRATAP SINGH LODHI", "course": "B.Sc.", "topics": [16, 5] },
-    "Y25102020": { "name": "BHOOMI SONI", "course": "B.Sc.", "topics": [7, 8] },
-    "Y25102021": { "name": "SHRADDHA RAJPOOT", "course": "B.Sc.", "topics": [1, 7] },
-    "Y25104006": { "name": "BINDU SHREE DAS", "course": "B.Sc.", "topics": [6, 14] },
-    "Y25104079": { "name": "SHIVAM JAISWAL", "course": "B.Sc.", "topics": [4, 8] },
-    "Y25105001": { "name": "AMISHA KUMARI SHARMA", "course": "B.Sc.", "topics": [1, 7] },
-    "Y25105002": { "name": "ANJALI SURYAVANSHI", "course": "B.Sc.", "topics": [2, 7] },
-    "Y25105003": { "name": "ANSHIKA PANDEY", "course": "B.Sc.", "topics": [3, 8] },
-    "Y25105004": { "name": "ANUJ DWIVEDI", "course": "B.Sc.", "topics": [4, 9] },
-    "Y25105005": { "name": "ASHMI CHOUHAN", "course": "B.Sc.", "topics": [4, 10] },
-    "Y25105006": { "name": "AYUSHI JAIN", "course": "B.Sc.", "topics": [5, 11] },
-    "Y25105007": { "name": "BABLOO KUMAR", "course": "B.Sc.", "topics": [6, 12] },
-    "Y25105008": { "name": "DIVYA PATEL", "course": "B.Sc.", "topics": [7, 13] },
-    "Y25105009": { "name": "GOPAL DINKAR", "course": "B.Sc.", "topics": [7, 14] },
-    "Y25105010": { "name": "HANSHIKA KORI", "course": "B.Sc.", "topics": [8, 14] },
-    "Y25105011": { "name": "JAHANVI SOUR", "course": "B.Sc.", "topics": [9, 15] },
-    "Y25105012": { "name": "KANCHI SONI", "course": "B.Sc.", "topics": [10, 16] },
-    "Y25105014": { "name": "KHUSHI PRASAD", "course": "B.Sc.", "topics": [12, 1] },
-    "Y25105015": { "name": "MAMTA NAMDEO", "course": "B.Sc.", "topics": [6, 10] },
-    "Y25105016": { "name": "NANDINI KURMI", "course": "B.Sc.", "topics": [14, 3] },
-    "Y25105017": { "name": "NEERAJ SINGH", "course": "B.Sc.", "topics": [14, 4] },
-    "Y25105018": { "name": "PAYAL CHOURASIA", "course": "B.Sc.", "topics": [15, 4] },
-    "Y25105019": { "name": "POORNIMA DIXIT", "course": "B.Sc.", "topics": [5, 15] },
-    "Y25105020": { "name": "PRIYDARSHNI DUBEY", "course": "B.Sc.", "topics": [0, 6] },
-    "Y25105021": { "name": "RAGNEE PATEL", "course": "B.Sc.", "topics": [1, 7] },
-    "Y25105022": { "name": "RAHIYA SHEIKH", "course": "B.Sc.", "topics": [10, 16] },
-    "Y25105023": { "name": "RAMPAL AHIRWAR", "course": "B.Sc.", "topics": [0, 0] },
-    "Y25105024": { "name": "SAKSHI GAUTAM", "course": "B.Sc.", "topics": [4, 9] },
-    "Y25105026": { "name": "TAMADA TANUJA", "course": "B.Sc.", "topics": [7, 13] },
-    "Y25105027": { "name": "TANUJA CHAURASIA", "course": "B.Sc.", "topics": [6, 12] },
-    "Y25105029": { "name": "VAIBHAV VISHNOI", "course": "B.Sc.", "topics": [3, 7] },
-    "Y25105031": { "name": "ROHAN AHIRWAR", "course": "B.Sc.", "topics": [9, 15] },
-    "Y25105032": { "name": "SUHANI PATEL", "course": "B.Sc.", "topics": [10, 16] },
-    "Y25106001": { "name": "AANAND KUMAR", "course": "B.Sc.", "topics": [1, 7] },
-    "Y25106002": { "name": "AAVANI M", "course": "B.Sc.", "topics": [2, 7] },
-    "Y25106004": { "name": "AMAN RATHORE", "course": "B.Sc.", "topics": [4, 9] },
-    "Y25106005": { "name": "AMBIKA DAHAYAT", "course": "B.Sc.", "topics": [7, 14] },
-    "Y25106006": { "name": "ANJALI RAI", "course": "B.Sc.", "topics": [5, 11] },
-    "Y25106007": { "name": "ANKITA PATEL", "course": "B.Sc.", "topics": [6, 12] },
-    "Y25106008": { "name": "ANKUSH KUMAR", "course": "B.Sc.", "topics": [7, 13] },
-    "Y25106010": { "name": "ARYA CHOUBEY", "course": "B.Sc.", "topics": [8, 14] },
-    "Y25106011": { "name": "DIVYANSH SURYAVANSHI", "course": "B.Sc.", "topics": [1, 8] },
-    "Y25106012": { "name": "GAURAV PATEL", "course": "B.Sc.", "topics": [10, 16] },
-    "Y25106013": { "name": "HARSHITA CHOUBEY", "course": "B.Sc.", "topics": [11, 0] },
-    "Y25106014": { "name": "HARSHITA SAHU", "course": "B.Sc.", "topics": [12, 1] },
-    "Y25106015": { "name": "KAIFY YUSUF", "course": "B.Sc.", "topics": [13, 2] },
-    "Y25106016": { "name": "KANCHAN", "course": "B.Sc.", "topics": [14, 3] },
-    "Y25106017": { "name": "KASHISH KUMARI", "course": "B.Sc.", "topics": [14, 4] },
-    "Y25106018": { "name": "KAUSHAL KUMAR", "course": "B.Sc.", "topics": [15, 4] },
-    "Y25106019": { "name": "KHUSHI MISHRA", "course": "B.Sc.", "topics": [16, 5] },
-    "Y25106020": { "name": "KRISHNA YADAV", "course": "B.Sc.", "topics": [0, 6] },
-    "Y25106021": { "name": "LAVANYA SHARMA", "course": "B.Sc.", "topics": [1, 7] },
-    "Y25106022": { "name": "LAVANYA SINGH", "course": "B.Sc.", "topics": [2, 7] },
-    "Y25106023": { "name": "MAHI SONI", "course": "B.Sc.", "topics": [3, 8] },
-    "Y25106024": { "name": "MENDKE SANDESH SADANAND", "course": "B.Sc.", "topics": [4, 9] },
-    "Y25106026": { "name": "NANDINI MISHRA", "course": "B.Sc.", "topics": [5, 11] },
-    "Y25106027": { "name": "NANDNI SHARMA", "course": "B.Sc.", "topics": [6, 12] },
-    "Y25106028": { "name": "PANKAJ SHAKYA", "course": "B.Sc.", "topics": [7, 13] },
-    "Y25106029": { "name": "PARTH RAWAT", "course": "B.Sc.", "topics": [7, 14] },
-    "Y25106030": { "name": "RIKANSHA YASHONA", "course": "B.Sc.", "topics": [8, 14] },
-    "Y25106031": { "name": "RIYA KUMARI", "course": "B.Sc.", "topics": [3, 8] },
-    "Y25106034": { "name": "SHALINI RAWAT", "course": "B.Sc.", "topics": [7, 14] },
-    "Y25106035": { "name": "SHAMBHAVI TIWARI", "course": "B.Sc.", "topics": [13, 2] },
-    "Y25106036": { "name": "SNEHA THAKUR", "course": "B.Sc.", "topics": [14, 3] },
-    "Y25106037": { "name": "SUDIPTA ACHARJEE", "course": "B.Sc.", "topics": [14, 4] },
-    "Y25106038": { "name": "SUNEET KAUR", "course": "B.Sc.", "topics": [15, 4] },
-    "Y25106039": { "name": "TANISHQ SHARMA", "course": "B.Sc.", "topics": [16, 5] },
-    "Y25106040": { "name": "TUSHAR", "course": "B.Sc.", "topics": [0, 6] },
-    "Y25106042": { "name": "VRANDA CHOURASIYA", "course": "B.Sc.", "topics": [2, 7] },
-    "Y25106043": { "name": "MUKTI JESWANI", "course": "B.Sc.", "topics": [3, 8] },
-    "Y25106045": { "name": "SAKSHAM JAIN", "course": "B.Sc.", "topics": [4, 10] },
-    "Y25106047": { "name": "CATHERIN JOY", "course": "B.Sc.", "topics": [6, 12] },
-    "Y25109001": { "name": "ARADHNA PAUL", "course": "B.Sc.", "topics": [1, 7] },
-    "Y25109002": { "name": "JANVI AHIRWAR", "course": "B.Sc.", "topics": [2, 7] },
-    "Y25109003": { "name": "KANAK CHOUKSEY", "course": "B.Sc.", "topics": [3, 8] },
-    "Y25109004": { "name": "MONICA PANDEY", "course": "B.Sc.", "topics": [4, 9] },
-    "Y25109007": { "name": "RAGINI BADHOLIYA", "course": "B.Sc.", "topics": [6, 12] },
-    "Y25109008": { "name": "SAKSHI", "course": "B.Sc.", "topics": [7, 13] },
-    "Y25109009": { "name": "SHRADHA RAIKWAR", "course": "B.Sc.", "topics": [7, 14] },
-    "Y25109010": { "name": "SNEHA KUMARI", "course": "B.Sc.", "topics": [8, 14] },
-    "Y25109012": { "name": "KHUSHUBU JAISWAL", "course": "B.Sc.", "topics": [10, 16] },
-    "Y25109013": { "name": "MAHAK BURMAN", "course": "B.Sc.", "topics": [11, 0] },
-    "Y25109014": { "name": "NAINSI SONI", "course": "B.Sc.", "topics": [12, 1] },
-    "Y25109015": { "name": "POONAM DIXIT", "course": "B.Sc.", "topics": [13, 2] },
-    "Y25109016": { "name": "SHRADDHA SINGH THAKUR", "course": "B.Sc.", "topics": [14, 3] },
-    "Y25109019": { "name": "TEJASWANI PATEL", "course": "B.Sc.", "topics": [16, 5] },
-    "Y25109020": { "name": "YASHWANT AHIRWAR", "course": "B.Sc.", "topics": [5, 8] },
-    "Y25109021": { "name": "SURBHI DUBEY", "course": "B.Sc.", "topics": [1, 7] }
+    // --- B.A. III-SEMESTER STUDENTS ---
+    "Y25120425": { name: "Rudraksh Patel", course: "B.A.", topics: [0, 7] },
+    "Y20125187": { name: "Ikrakhan", course: "B.A.", topics: [1, 8] },
+    "Y24120333": { name: "Ayushi Suryavanshi", course: "B.A.", topics: [2, 9] },
+    "Y25120018": { name: "Abhiyant Singh Thakur", course: "B.A.", topics: [3, 10] },
+    "Y25120029": { name: "Aishanya Singh Thakur", course: "B.A.", topics: [4, 11] },
+    "Y25120047": { name: "Anamika Thakur", course: "B.A.", topics: [5, 12] },
+    "Y25120065": { name: "Anokhi Jain", course: "B.A.", topics: [6, 13] },
+    "Y25120068": { name: "Anshika Singh", course: "B.A.", topics: [7, 0] },
+    "Y25120079": { name: "Anushka Nema", course: "B.A.", topics: [8, 1] },
+    "Y25120106": { name: "Bharti Raikwar", course: "B.A.", topics: [9, 2] },
+    "Y25120107": { name: "Bhoomi Thakur", course: "B.A.", topics: [10, 3] },
+    "Y25120119": { name: "Charu Patle", course: "B.A.", topics: [11, 4] },
+    "Y25120134": { name: "Deepika Rai", course: "B.A.", topics: [12, 5] },
+    "Y25120154": { name: "Durga Ahirwar", course: "B.A.", topics: [13, 6] },
+    "Y25120181": { name: "Hemant Prajapati", course: "B.A.", topics: [0, 5] },
+    "Y25120187": { name: "Ikra Khan", course: "B.A.", topics: [1, 6] },
+    "Y25120205": { name: "Kanchan Gound", course: "B.A.", topics: [2, 7] },
+    "Y25120207": { name: "Kanika Soni", course: "B.A.", topics: [3, 8] },
+    "Y25120218": { name: "Krashna Kumar Chaudhary", course: "B.A.", topics: [4, 9] },
+    "Y25120248": { name: "Madhur Sharma", course: "B.A.", topics: [5, 10] },
+    "Y25120277": { name: "Mayank Urmaliya", course: "B.A.", topics: [6, 11] },
+    "Y25120288": { name: "Nainika Roy", course: "B.A.", topics: [7, 12] },
+    "Y25120296": { name: "Manshi Sen", course: "B.A.", topics: [8, 13] },
+    "Y25120345": { name: "Pratha Sahu", course: "B.A.", topics: [9, 0] },
+    "Y25120371": { name: "Rahul Kumar", course: "B.A.", topics: [10, 1] },
+    "Y25120375": { name: "Raj Ahirwar", course: "B.A.", topics: [11, 2] },
+    "Y25120475": { name: "Bhagyesh Sharma", course: "B.A.", topics: [12, 3] },
+    "Y25120486": { name: "Shivansh Jadiya", course: "B.A.", topics: [13, 4] },
+    "Y25120515": { name: "Snigdhadeep Majumdar", course: "B.A.", topics: [0, 8] },
+    "Y25120516": { name: "Sohit Raj", course: "B.A.", topics: [1, 9] },
+    "Y25120523": { name: "Soniya Patel", course: "B.A.", topics: [2, 10] },
+    "Y25120529": { name: "Suhani Shakya (Kori)", course: "B.A.", topics: [3, 11] },
+    "Y25120539": { name: "Surendra Rajpoot", course: "B.A.", topics: [4, 12] },
+    "Y25120543": { name: "Suryansh Saxena", course: "B.A.", topics: [5, 13] },
+    "Y25120551": { name: "Tarang Iyer", course: "B.A.", topics: [6, 0] },
+    "Y25120556": { name: "Trupti Kaushal", course: "B.A.", topics: [7, 1] },
+    "Y25120569": { name: "Vaishnavi Ghoshi", course: "B.A.", topics: [8, 2] },
+    "Y25120599": { name: "Yashvardhan Singh", course: "B.A.", topics: [9, 3] },
+    "Y25120612": { name: "Arman Singh Rajpoot", course: "B.A.", topics: [10, 4] },
+    "Y25120615": { name: "Aryan Kurmi", course: "B.A.", topics: [11, 5] },
+    "Y25120616": { name: "Bhagyashree", course: "B.A.", topics: [12, 6] },
+    "Y25120620": { name: "Devarshi Dubey", course: "B.A.", topics: [13, 7] },
+    "Y25120626": { name: "Kalpana Kumari", course: "B.A.", topics: [0, 10] },
+    "Y25120632": { name: "Nikhil Raikwar", course: "B.A.", topics: [1, 11] },
+    "Y25120634": { name: "Pragati Yadav", course: "B.A.", topics: [2, 12] },
+    "Y25120635": { name: "Prince Dangi", course: "B.A.", topics: [3, 13] },
+    "Y25120640": { name: "Radhika Thakur", course: "B.A.", topics: [4, 0] },
+    "Y25120642": { name: "Ramji Tiwari", course: "B.A.", topics: [5, 1] },
+    "Y25120654": { name: "Satyam Jain", course: "B.A.", topics: [6, 2] },
+    "Y25120655": { name: "Sejal Jain", course: "B.A.", topics: [7, 3] },
+    "Y25120662": { name: "Surya Kesharwani", course: "B.A.", topics: [8, 4] },
+    "Y25130036": { name: "Kajal Ahirwar", course: "B.A.", topics: [9, 5] },
+    "Y25130063": { name: "Ravindra Singh Yadav", course: "B.A.", topics: [10, 6] },
+    "Y25130072": { name: "Sarswati Kushwaha", course: "B.A.", topics: [11, 7] },
+    "Y26120514": { name: "Sneha Gound", course: "B.A.", topics: [12, 8] },
+
+    // --- B.Sc. III-SEMESTER STUDENTS ---
+    "Y25101002": { name: "Amarjeet Raikwar", course: "B.Sc.", topics: [13, 9] },
+    "Y25102001": { name: "Aanchal Shyamanand Jha", course: "B.Sc.", topics: [0, 12] },
+    "Y25102002": { name: "Adity kumari", course: "B.Sc.", topics: [1, 13] },
+    "Y25102003": { name: "Ananya Gautam", course: "B.Sc.", topics: [2, 0] },
+    "Y25102005": { name: "Jashoda Bhoi", course: "B.Sc.", topics: [3, 1] },
+    "Y25102006": { name: "Meghadri roy", course: "B.Sc.", topics: [4, 2] },
+    "Y25102007": { name: "Panismita Bag", course: "B.Sc.", topics: [5, 3] },
+    "Y25102008": { name: "Prasant devtalla", course: "B.Sc.", topics: [6, 4] },
+    "Y25102009": { name: "Ripunjita Borah", course: "B.Sc.", topics: [7, 5] },
+    "Y25102010": { name: "Rohini Baidh", course: "B.Sc.", topics: [8, 6] },
+    "Y25102011": { name: "Rudraksh Chouhan", course: "B.Sc.", topics: [9, 7] },
+    "Y25102012": { name: "Satyam Adiwashi", course: "B.Sc.", topics: [10, 8] },
+    "Y25102013": { name: "Seemantni bisen", course: "B.Sc.", topics: [11, 9] },
+    "Y25102014": { name: "Shivangi Sahu", course: "B.Sc.", topics: [12, 10] },
+    "Y25102015": { name: "Shreya mourya", course: "B.Sc.", topics: [13, 11] },
+    "Y25102016": { name: "Sonali Pani", course: "B.Sc.", topics: [0, 2] },
+    "Y25102017": { name: "Suhani", course: "B.Sc.", topics: [1, 3] },
+    "Y25102018": { name: "Tanisha Shilpi", course: "B.Sc.", topics: [2, 4] },
+    "Y25102019": { name: "Abhay pratap singh lodhi", course: "B.Sc.", topics: [3, 5] },
+    "Y25102020": { name: "Bhoomi Soni", course: "B.Sc.", topics: [4, 6] },
+    "Y25102021": { name: "Shraddha Rajpoot", course: "B.Sc.", topics: [5, 7] },
+    "Y25104006": { name: "Bindu shree das", course: "B.Sc.", topics: [6, 8] },
+    "Y25104079": { name: "Shivam Jaiswal", course: "B.Sc.", topics: [7, 9] },
+    "Y25105001": { name: "AMISHA KUMARI SHARMA", course: "B.Sc.", topics: [8, 10] },
+    "Y25105002": { name: "Anjali suryavanshi", course: "B.Sc.", topics: [9, 11] },
+    "Y25105003": { name: "Anshika Pandey", course: "B.Sc.", topics: [10, 12] },
+    "Y25105004": { name: "Anuj Dwivedi", course: "B.Sc.", topics: [11, 13] },
+    "Y25105005": { name: "ASHMI CHOUHAN", course: "B.Sc.", topics: [12, 0] },
+    "Y25105006": { name: "Ayushi Jain", course: "B.Sc.", topics: [13, 1] },
+    "Y25105007": { name: "Babloo kumar", course: "B.Sc.", topics: [0, 4] },
+    "Y25105008": { name: "Divya patel", course: "B.Sc.", topics: [1, 5] },
+    "Y25105009": { name: "Gopal Dinkar", course: "B.Sc.", topics: [2, 6] },
+    "Y25105010": { name: "Hanshika kori", course: "B.Sc.", topics: [3, 7] },
+    "Y25105011": { name: "Jahanvi Sour", course: "B.Sc.", topics: [4, 8] },
+    "Y25105012": { name: "Kanchi soni", course: "B.Sc.", topics: [5, 9] },
+    "Y25105014": { name: "Khushi Prasad", course: "B.Sc.", topics: [6, 10] },
+    "Y25105015": { name: "Mamta Namdeo", course: "B.Sc.", topics: [7, 11] },
+    "Y25105016": { name: "Nandini kurmi", course: "B.Sc.", topics: [8, 12] },
+    "Y25105017": { name: "Neeraj Singh", course: "B.Sc.", topics: [9, 13] },
+    "Y25105018": { name: "Payal Chourasia", course: "B.Sc.", topics: [10, 0] },
+    "Y25105019": { name: "Poornima Dixit", course: "B.Sc.", topics: [11, 1] },
+    "Y25105020": { name: "Priydarshni dubey", course: "B.Sc.", topics: [12, 2] },
+    "Y25105021": { name: "Ragnee patel", course: "B.Sc.", topics: [13, 3] },
+    "Y25105022": { name: "Rahiya Sheikh", course: "B.Sc.", topics: [0, 6] },
+    "Y25105023": { name: "Rampal Ahirwar", course: "B.Sc.", topics: [1, 7] },
+    "Y25105024": { name: "Sakshi Gautam", course: "B.Sc.", topics: [2, 8] },
+    "Y25105026": { name: "Tanuja Tamada", course: "B.Sc.", topics: [3, 9] },
+    "Y25105027": { name: "Tanuja chaurasia", course: "B.Sc.", topics: [4, 10] },
+    "Y25105029": { name: "Vaibhav vishnoi", course: "B.Sc.", topics: [5, 11] },
+    "Y25105031": { name: "Rohan Ahirwar", course: "B.Sc.", topics: [6, 12] },
+    "Y25105032": { name: "Suhani Patel", course: "B.Sc.", topics: [7, 13] },
+    "Y25106001": { name: "AANAND KUMAR", course: "B.Sc.", topics: [8, 0] },
+    "Y25106002": { name: "Aavani M", course: "B.Sc.", topics: [9, 1] },
+    "Y25106004": { name: "Aman Rathore", course: "B.Sc.", topics: [10, 2] },
+    "Y25106005": { name: "Ambika dahayat", course: "B.Sc.", topics: [11, 3] },
+    "Y25106006": { name: "Anjali Rai", course: "B.Sc.", topics: [12, 4] },
+    "Y25106007": { name: "Ankita Patel", course: "B.Sc.", topics: [13, 5] },
+    "Y25106008": { name: "Ankush kumar", course: "B.Sc.", topics: [0, 8] },
+    "Y25106010": { name: "Arya Choubey", course: "B.Sc.", topics: [1, 9] },
+    "Y25106011": { name: "Divyansh Suryavanshi", course: "B.Sc.", topics: [2, 10] },
+    "Y25106012": { name: "Gaurav Patel", course: "B.Sc.", topics: [3, 11] },
+    "Y25106013": { name: "Harshita Choubey", course: "B.Sc.", topics: [4, 12] },
+    "Y25106014": { name: "Harshita Sahu", course: "B.Sc.", topics: [5, 13] },
+    "Y25106015": { name: "Kaify Yusuf", course: "B.Sc.", topics: [6, 0] },
+    "Y25106016": { name: "Kanchan", course: "B.Sc.", topics: [7, 1] },
+    "Y25106017": { name: "KASHISH KUMARI", course: "B.Sc.", topics: [8, 2] },
+    "Y25106018": { name: "KAUSHAL KUMAR", course: "B.Sc.", topics: [9, 3] },
+    "Y25106019": { name: "Khushi Mishra", course: "B.Sc.", topics: [10, 4] },
+    "Y25106020": { name: "Krishna yadav", course: "B.Sc.", topics: [11, 5] },
+    "Y25106021": { name: "Lavanya Sharma", course: "B.Sc.", topics: [12, 6] },
+    "Y25106022": { name: "Lavanya Singh", course: "B.Sc.", topics: [13, 7] },
+    "Y25106023": { name: "Mahi Soni", course: "B.Sc.", topics: [0, 10] },
+    "Y25106024": { name: "MENDKE SANDESH SADANAND", course: "B.Sc.", topics: [1, 11] },
+    "Y25106026": { name: "Nandini mishra", course: "B.Sc.", topics: [2, 12] },
+    "Y25106027": { name: "Nandni sharma", course: "B.Sc.", topics: [3, 13] },
+    "Y25106028": { name: "PANKAJ SHAKYA", course: "B.Sc.", topics: [4, 0] },
+    "Y25106029": { name: "Parth Rawat", course: "B.Sc.", topics: [5, 1] },
+    "Y25106030": { name: "Rikansha yashona", course: "B.Sc.", topics: [6, 2] },
+    "Y25106031": { name: "Riya kumari", course: "B.Sc.", topics: [7, 3] },
+    "Y25106034": { name: "Shalini rawat", course: "B.Sc.", topics: [8, 4] },
+    "Y25106035": { name: "Shambhavi Tiwari", course: "B.Sc.", topics: [9, 5] },
+    "Y25106036": { name: "Sneha Thakur", course: "B.Sc.", topics: [10, 6] },
+    "Y25106037": { name: "Sudipta acharjee", course: "B.Sc.", topics: [11, 7] },
+    "Y25106038": { name: "Suneet kaur", course: "B.Sc.", topics: [12, 8] },
+    "Y25106039": { name: "Tanishq Sharma", course: "B.Sc.", topics: [13, 9] },
+    "Y25106040": { name: "Tushar", course: "B.Sc.", topics: [0, 12] },
+    "Y25106042": { name: "Vranda Chourasiya", course: "B.Sc.", topics: [1, 13] },
+    "Y25106043": { name: "Mukti Jeswani", course: "B.Sc.", topics: [2, 0] },
+    "Y25106045": { name: "Saksham jain", course: "B.Sc.", topics: [3, 1] },
+    "Y25106047": { name: "Catherin Joy", course: "B.Sc.", topics: [4, 2] },
+    "Y25109001": { name: "Aaradhna paul", course: "B.Sc.", topics: [5, 3] },
+    "Y25109002": { name: "Janvi Ahirwar", course: "B.Sc.", topics: [6, 4] },
+    "Y25109003": { name: "Kanak Chouksey", course: "B.Sc.", topics: [7, 5] },
+    "Y25109004": { name: "Monica pandey", course: "B.Sc.", topics: [8, 6] },
+    "Y25109007": { name: "Ragini badholiya", course: "B.Sc.", topics: [9, 7] },
+    "Y25109008": { name: "Sakshi", course: "B.Sc.", topics: [10, 8] },
+    "Y25109009": { name: "Shradha raikwar", course: "B.Sc.", topics: [11, 9] },
+    "Y25109010": { name: "SNEHA KUMARI", course: "B.Sc.", topics: [12, 10] },
+    "Y25109012": { name: "KHUSHUBU JAISWAL", course: "B.Sc.", topics: [13, 11] },
+    "Y25109013": { name: "Mahak Burman", course: "B.Sc.", topics: [0, 1] },
+    "Y25109014": { name: "Nainsi soni", course: "B.Sc.", topics: [2, 3] },
+    "Y25109015": { name: "Poonam Dixit", course: "B.Sc.", topics: [4, 5] },
+    "Y25109016": { name: "Shraddha Singh thakur", course: "B.Sc.", topics: [6, 7] },
+    "Y25109019": { name: "Tejaswani patel", course: "B.Sc.", topics: [8, 9] },
+    "Y25109021": { name: "Surbhi Dubey", course: "B.Sc.", topics: [10, 11] }
 };
 
 let currentStudentId = "";
 let currentStrikeCount = 0;
-let lastMemeIndex = -1; 
+let lastTrapIndex = -1; 
 
 function getDeviceData() {
     return {
@@ -203,26 +213,120 @@ function getDeviceData() {
     };
 }
 
-// --- 5. LOGIN LOGIC ---
-document.getElementById('generate-btn').addEventListener('click', async () => {
+// Auto-capitalize enrollment box input
+document.getElementById('enrollment-input').addEventListener('input', function() {
+    this.value = this.value.toUpperCase().replace(/\s/g, '');
+});
+
+// Restrict mobile input to numeric only
+document.getElementById('reg-mobile').addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+
+// ==========================================
+// 4. LOGIN LOGIC
+// ==========================================
+document.getElementById('generate-btn').addEventListener('click', () => {
+    handleAccessHub();
+});
+
+document.getElementById('enrollment-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleAccessHub();
+});
+
+function handleAccessHub() {
     const enrollment = document.getElementById('enrollment-input').value.trim().toUpperCase();
+    if (!enrollment) return;
+
+    currentStudentId = enrollment;
     const student = studentDB[enrollment];
-    const errorMsg = document.getElementById('error-msg');
     
-    if (!student) {
+    document.getElementById('landing-card').classList.add('hidden');
+    
+    if (student) {
+        // Pre-registered student
+        displayResults(student.name, enrollment, student.course, student.topics);
+        if (supabaseClient) performBackgroundTracking(enrollment, 'login');
+    } else {
+        // Unregistered student -> Trigger registration form
+        document.getElementById('reg-enrollment').value = enrollment;
+        document.getElementById('registration-card').classList.remove('hidden');
+    }
+}
+
+// ==========================================
+// 5. REGISTRATION FORM LOGIC (Saves to Supabase -> CSV Export)
+// ==========================================
+document.getElementById('submit-reg-btn').addEventListener('click', async () => {
+    const name = document.getElementById('reg-name').value.trim();
+    const course = document.getElementById('reg-course').value;
+    const enrollment = document.getElementById('reg-enrollment').value.trim();
+    const father = document.getElementById('reg-father').value.trim();
+    const mobile = document.getElementById('reg-mobile').value.trim();
+    const combination = document.getElementById('reg-combination').value.trim();
+    const address = document.getElementById('reg-address').value.trim();
+    const errorMsg = document.getElementById('reg-error-msg');
+
+    // Validation
+    if (!name || !course || !father || !mobile || !combination || !address) {
+        errorMsg.innerText = "⚠️ Please fill in all required fields.";
+        errorMsg.classList.remove('hidden');
+        return;
+    }
+
+    if (mobile.length !== 10) {
+        errorMsg.innerText = "⚠️ Mobile number must be exactly 10 digits.";
         errorMsg.classList.remove('hidden');
         return;
     }
     
     errorMsg.classList.add('hidden');
-    currentStudentId = enrollment;
+    const btn = document.getElementById('submit-reg-btn');
+    btn.disabled = true;
+    btn.innerText = "Generating Topics & Registering...";
+
+    // Generate 2 Random Unique Topics
+    let topic1 = Math.floor(Math.random() * assignmentTopics.length);
+    let topic2;
+    do { 
+        topic2 = Math.floor(Math.random() * assignmentTopics.length); 
+    } while (topic1 === topic2);
     
-    document.getElementById('student-name-display').innerText = `Welcome, ${student.name}`;
-    document.getElementById('student-details-display').innerText = `Enrollment: ${enrollment} | Program: ${student.course}`;
+    const assignedTopics = [topic1, topic2];
+
+    // Push to Supabase 'unregistered_students'
+    if (supabaseClient) {
+        try {
+            await supabaseClient.from('unregistered_students').insert([{
+                enrollment_no: enrollment,
+                full_name: name,
+                course: course,
+                fathers_name: father,
+                mobile_no: mobile,
+                combination: combination,
+                address: address,
+                assigned_topics: assignedTopics.map(i => assignmentTopics[i].title).join(' | ')
+            }]);
+            performBackgroundTracking(enrollment, 'new_registration');
+        } catch (e) {
+            console.warn("Database insert issue:", e);
+        }
+    }
+
+    document.getElementById('registration-card').classList.add('hidden');
+    displayResults(name, enrollment, course, assignedTopics);
+});
+
+// ==========================================
+// 6. DISPLAY RESULTS LOGIC
+// ==========================================
+function displayResults(name, enrollment, course, topicsArray) {
+    document.getElementById('student-name-display').innerText = `Welcome, ${name}`;
+    document.getElementById('student-details-display').innerText = `Course: ${course} | Enrollment: ${enrollment}`;
     
     const listDiv = document.getElementById('topic-list');
     let topicsHTML = "";
-    student.topics.forEach(index => {
+    topicsArray.forEach(index => {
         let topicObj = assignmentTopics[index];
         if (topicObj) {
             topicsHTML += `
@@ -232,244 +336,76 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
         }
     });
     listDiv.innerHTML = topicsHTML;
-
-    // --- Practical & Voting Initialization ---
-    // Now searching by enrollment ID directly
-    const studentGroup = findStudentGroup(currentStudentId);
     
-    if (studentGroup) {
-        document.getElementById('practical-group-display').innerText = `You are in Group: ${studentGroup.id}`;
-        document.getElementById('practical-topic-display').innerText = studentGroup.topic;
-        
-        let hasVoted = false;
-        if (supabaseClient) {
-            const { data } = await supabaseClient.from('votes').select('*').eq('voter_id', currentStudentId).single();
-            if (data) hasVoted = true;
-        }
-
-        if (hasVoted) {
-            document.getElementById('voting-instruction').classList.add('hidden');
-            document.getElementById('voting-list').classList.add('hidden');
-            document.getElementById('submit-vote-btn').classList.add('hidden');
-            fetchAndDisplayResults(studentGroup);
-        } else {
-            const votingList = document.getElementById('voting-list');
-            votingList.innerHTML = "";
-            
-            studentGroup.members.forEach(memberEnrollment => {
-                const isSelf = currentStudentId === memberEnrollment;
-                
-                // Fetch the actual display name from the database
-                const memberData = studentDB[memberEnrollment];
-                const displayName = memberData ? memberData.name : memberEnrollment;
-                const shortName = displayName.split(' ')[0];
-                
-                const label = document.createElement('label');
-                label.className = 'vote-option';
-                
-                // NOTE: We now use the Enrollment Number as the vote value, not the string name!
-                label.innerHTML = `
-                    <input type="radio" name="leader-vote" value="${memberEnrollment}" ${isSelf ? 'disabled' : ''}>
-                    <span>${displayName} ${isSelf ? '(You)' : ''}</span>
-                `;
-                
-                label.querySelector('input').addEventListener('change', () => {
-                    const btn = document.getElementById('submit-vote-btn');
-                    btn.disabled = false;
-                    btn.style.background = 'var(--primary-navy)';
-                    btn.innerText = `Vote for ${shortName}`;
-                });
-                
-                votingList.appendChild(label);
-            });
-        }
-    } else {
-        document.getElementById('practical-section').innerHTML = "<p><em>Your practical group assignment is pending. Check back later.</em></p>";
-        document.getElementById('vote-section').classList.add('hidden');
-    }
-
-    document.getElementById('landing-card').classList.add('hidden');
     document.getElementById('results-area').classList.remove('hidden');
-    setTimeout(() => { document.getElementById('watermark').classList.remove('hidden'); }, 500);
+    setTimeout(() => { 
+        document.getElementById('watermark').classList.remove('hidden'); 
+    }, 500);
+}
 
-    if (supabaseClient) performBackgroundTracking(enrollment);
-});
-
-async function performBackgroundTracking(enrollment) {
+// ==========================================
+// 7. BACKGROUND TELEMETRY & TRAP ROULETTE
+// ==========================================
+async function performBackgroundTracking(enrollment, actionType) {
     const { device, timezone } = getDeviceData();
     try {
         await supabaseClient.from('tracking').insert([
-            { enrollment_no: enrollment, action: 'login', device: device, timezone: timezone }
+            { enrollment_no: enrollment, action: actionType, device: device, timezone: timezone }
         ]);
         
-        const { count, error } = await supabaseClient.from('tracking').select('*', { count: 'exact', head: true }).eq('enrollment_no', enrollment).eq('action', 'cheat');
+        const { count, error } = await supabaseClient.from('tracking')
+            .select('*', { count: 'exact', head: true })
+            .eq('enrollment_no', enrollment)
+            .eq('action', 'cheat');
 
-        if (!error && count !== null) {
+        if (!error && count !== null && count >= 1) {
             currentStrikeCount = count;
-            if (currentStrikeCount >= 1) document.getElementById('trap-container').classList.add('hidden');
+            document.getElementById('trap-container').classList.add('hidden');
         }
-    } catch (e) { console.warn("Analytics telemetry failed, but UI remains functional."); }
+    } catch (e) {}
 }
 
-// --- 6. FAB TRACKING LOGIC ---
-function logFabClick(action) {
-    if (!supabaseClient) return;
-    const { device, timezone } = getDeviceData();
-    supabaseClient.from('tracking').insert([{ enrollment_no: currentStudentId || 'unregistered', action: action, device: device, timezone: timezone }]).catch(e => console.warn("FAB tracking failed"));
-}
-
-document.getElementById('wa-help-btn').addEventListener('click', function(e) {
-    e.preventDefault(); 
-    logFabClick('whatsapp');
-    window.open(`https://wa.me/918986937029?text=Hi%20Ritik,%20I'm%20from%20B.Sc.%20Sem%202,%20I%20need%20help%20with%20the%20ANT-DSM-211%20assignment.`, '_blank');
-});
-
-document.getElementById('game-btn').addEventListener('click', function(e) {
-    e.preventDefault(); 
-    logFabClick('game');
-    window.open('https://ritikspin.onrender.com', '_blank');
-});
-
-// --- 7. THE TRAP ROULETTE ---
-const trapLinks = [
-    "https://youtu.be/HI8nIMRhuvo?si=DUAZbFgGgyWz4Gym", "https://youtu.be/AJG-Nluvg5c?si=H-3jrY2DQmwVqt_Y",
-    "https://youtu.be/bQ5NAumOtC0?si=9y64RxXIsDHIUkm2", "https://youtu.be/lNwApgaHK4Y?si=zAP92p1N6dTj62gj",
-    "https://youtu.be/4TjrQ9sG9TE?si=DQwtYI2Tl6Hzxkft", "https://youtu.be/VX9npbMm6Cc?si=ApBJ7EaynaUTZ-_1",
-    "https://youtu.be/7rym-VB6YhE?si=NjlcMJrh0DvqbAJ6", "https://youtu.be/55Q9Ko1O5kQ?si=TtdqyCY5qCAFn5H0",
-    "https://youtu.be/0A4yLCUfIkE?si=jqrvFdzK44fwLQyf"
+const newTrapLinks = [
+    "https://youtu.be/dQw4w9WgXcQ", 
+    "https://youtu.be/V-_O7nl0Ii0?si=pX2s6UUSxR3vE7zN", 
+    "https://youtu.be/3mE-59B4RZY?si=e_J2n9LzU9_9U3_F",
+    "https://youtu.be/xvFZjo5PgG0" 
 ];
 
 document.getElementById('cheat-btn').addEventListener('click', function() {
     currentStrikeCount++;
     let randomIndex;
-    do { randomIndex = Math.floor(Math.random() * trapLinks.length); } while (randomIndex === lastMemeIndex);
-    lastMemeIndex = randomIndex; 
+    do { 
+        randomIndex = Math.floor(Math.random() * newTrapLinks.length); 
+    } while (randomIndex === lastTrapIndex);
     
-    const finalLink = trapLinks[randomIndex];
+    lastTrapIndex = randomIndex; 
+    const finalLink = newTrapLinks[randomIndex];
     
     if (supabaseClient) {
         const { device, timezone } = getDeviceData();
-        supabaseClient.from('tracking').insert([{ enrollment_no: currentStudentId, action: 'cheat', strike_count: currentStrikeCount, meme_url: finalLink, device: device, timezone: timezone }]).catch(e => console.warn("Trap tracking failed"));
+        supabaseClient.from('tracking').insert([
+            { enrollment_no: currentStudentId, action: 'cheat', strike_count: currentStrikeCount, meme_url: finalLink, device: device, timezone: timezone }
+        ]).catch(e => {});
     }
 
     window.open(finalLink, '_blank');
-    if (currentStrikeCount >= 1) document.getElementById('trap-container').classList.add('hidden');
-});
-
-// --- 8. VOTING & RESULTS LOGIC ---
-document.getElementById('submit-vote-btn').addEventListener('click', async function() {
-    const selectedVote = document.querySelector('input[name="leader-vote"]:checked');
-    if (!selectedVote || !supabaseClient) return;
-
-    const votedForId = selectedVote.value; // This is now an Enrollment ID
-    const btn = this;
-    
-    btn.disabled = true;
-    btn.innerText = "Submitting...";
-
-    try {
-        const { error } = await supabaseClient.from('votes').insert([{ voter_id: currentStudentId, voted_for: votedForId, timestamp: new Date().toISOString() }]);
-        if (error) throw error;
-
-        document.getElementById('voting-instruction').classList.add('hidden');
-        document.getElementById('voting-list').classList.add('hidden');
-        btn.classList.add('hidden');
-
-        document.getElementById('funny-popup').classList.remove('hidden');
-
-    } catch (e) {
-        console.error("Voting failed:", e);
-        btn.innerText = "Error. Try Again.";
-        btn.style.background = "#e74c3c";
-        btn.disabled = false;
+    if (currentStrikeCount >= 1) {
+        document.getElementById('trap-container').classList.add('hidden');
     }
 });
 
-document.getElementById('close-popup-btn').addEventListener('click', () => {
-    document.getElementById('funny-popup').classList.add('hidden');
-    const studentGroup = findStudentGroup(currentStudentId);
-    fetchAndDisplayResults(studentGroup);
+// ==========================================
+// 8. FLOATING ACTION BUTTONS (FAB)
+// ==========================================
+document.getElementById('wa-help-btn').addEventListener('click', function(e) {
+    e.preventDefault(); 
+    if (supabaseClient) performBackgroundTracking(currentStudentId, 'whatsapp');
+    window.open(`https://wa.me/918986937029?text=Hi%20Ritik,%20I'm%20from%20Sem%203,%20I%20need%20help%20with%20the%20ANT-DSM-311%20assignment.`, '_blank');
 });
 
-async function fetchAndDisplayResults(group) {
-    if (!supabaseClient) return;
-    
-    document.getElementById('results-display-area').classList.remove('hidden');
-    const resultsContent = document.getElementById('results-content');
-    resultsContent.innerHTML = "<p>Loading live results...</p>";
-
-    try {
-        // Fetch votes using the enrollment IDs
-        const { data: groupVotes, error } = await supabaseClient.from('votes').select('voted_for').in('voted_for', group.members);
-        if (error) throw error;
-
-        const voteCounts = {};
-        group.members.forEach(m => voteCounts[m] = 0); 
-        groupVotes.forEach(v => { voteCounts[v.voted_for] += 1; });
-
-        const totalGroupMembers = group.members.length;
-        const votesNeededForMajority = Math.floor(totalGroupMembers / 2) + 1;
-        
-        let highestVotes = 0;
-        let leaderId = null;
-        let totalVotesCast = groupVotes.length;
-
-        const sortedResults = Object.entries(voteCounts).sort((a, b) => b[1] - a[1]);
-
-        if (sortedResults.length > 0) {
-            leaderId = sortedResults[0][0];
-            highestVotes = sortedResults[0][1];
-        }
-
-        resultsContent.innerHTML = ""; 
-
-        if (highestVotes >= votesNeededForMajority) {
-            
-            // Map winner ID back to real name
-            const winnerData = studentDB[leaderId];
-            const winnerName = winnerData ? winnerData.name : leaderId;
-            
-            document.getElementById('results-title').innerText = "🎉 We have a Group Leader!";
-            resultsContent.innerHTML = `
-                <div class="winner-banner">
-                    <div style="font-size: 30px; margin-bottom: 5px;">👑</div>
-                    <h4>${winnerName}</h4>
-                    <p style="margin-top: 5px; font-weight: normal; font-size: 14px;">Secured the absolute majority with ${highestVotes} votes.</p>
-                </div>
-            `;
-        } else {
-            document.getElementById('results-title').innerText = `📊 Current Standings (${totalVotesCast}/${totalGroupMembers} Voted)`;
-            
-            let activeCandidates = sortedResults.filter(r => r[1] > 0);
-            if (activeCandidates.length === 0) {
-                resultsContent.innerHTML = "<p style='color: #666; font-style: italic;'>No votes cast yet. Be the first!</p>";
-                return;
-            }
-
-            activeCandidates.forEach(([enrollmentId, count]) => {
-                const percentage = (count / totalGroupMembers) * 100;
-                
-                // Map ID back to first name for the progress bar display
-                const memberData = studentDB[enrollmentId];
-                const displayName = memberData ? memberData.name.split(' ')[0] : enrollmentId;
-                
-                resultsContent.innerHTML += `
-                    <div class="result-bar-container">
-                        <div class="result-name">${displayName}</div>
-                        <div class="result-bar-wrapper">
-                            <div class="result-bar" style="width: ${percentage}%"></div>
-                        </div>
-                        <div class="result-count">${count}</div>
-                    </div>
-                `;
-            });
-            
-            let votesLeft = totalGroupMembers - totalVotesCast;
-            resultsContent.innerHTML += `<p style="font-size: 12px; color: #888; text-align: center; margin-top: 15px;">Waiting for ${votesLeft} more members to vote.</p>`;
-        }
-
-    } catch (e) {
-        console.error("Failed to fetch results", e);
-        resultsContent.innerHTML = "<p>Error loading results.</p>";
-    }
-}
+document.getElementById('game-btn').addEventListener('click', function(e) {
+    e.preventDefault(); 
+    if (supabaseClient) performBackgroundTracking(currentStudentId, 'game');
+    window.open('https://ritikspin.onrender.com', '_blank');
+});

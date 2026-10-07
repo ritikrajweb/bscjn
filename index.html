@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANT DSM 211 | B.Sc. Assignment Hub</title>
+    <title>ANT DSM 311 | Assignment Hub</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    
     <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Main Login Card -->
     <div class="card" id="landing-card">
         <h2>Department of Anthropology</h2>
-        <h3 style="color: #555;">ANT DSM 211: Introduction to Socio-Cultural Anthropology</h3>
-        <p>Enter your University Enrollment Number to access your personalized B.Sc. Semester II dashboard and assigned topics.</p>
+        <h3 style="color: #555;">ANT-DSM-311: An Introduction to Archaeological Anthropology</h3>
+        <p>Enter your University Enrollment Number to access your personalized Semester III IA Theory Assignment topics.</p>
         
         <div class="input-group">
             <input type="text" id="enrollment-input" placeholder="e.g., Y25102000" required>
             <button id="generate-btn" class="btn">Access Hub</button>
         </div>
-        <p id="error-msg" class="hidden" style="color: #e74c3c; margin-top: 10px; font-weight: bold;">⚠️ Invalid Enrollment Number. Please check and try again.</p>
 
         <p style="margin-top: 30px; color: #555; line-height: 1.4;">
             Regards-<br>
@@ -31,6 +29,50 @@
         </p>
     </div>
 
+    <!-- Missing Student Registration Form -->
+    <div class="card hidden" id="registration-card" style="border-color: var(--accent-gold);">
+        <h2 style="color: var(--accent-gold);">Data Not Found 📝</h2>
+        <p>It looks like we don't have your pre-registered data. Please fill out this quick form to generate your assignment topics instantly.</p>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="reg-name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label>Course *</label>
+                <select id="reg-course" required>
+                    <option value="" disabled selected>Select Course</option>
+                    <option value="B.A.">B.A. (Bachelor of Arts)</option>
+                    <option value="B.Sc.">B.Sc. (Bachelor of Science)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Enrollment Number *</label>
+                <input type="text" id="reg-enrollment" readonly style="background: #f0f0f0;">
+            </div>
+            <div class="form-group">
+                <label>Father's Name *</label>
+                <input type="text" id="reg-father" placeholder="Enter father's name" required>
+            </div>
+            <div class="form-group">
+                <label>Mobile Number *</label>
+                <input type="text" id="reg-mobile" placeholder="10-digit mobile number" required>
+            </div>
+            <div class="form-group">
+                <label>Subject Combination *</label>
+                <input type="text" id="reg-combination" placeholder="e.g., Ant-Geo-Crim" required>
+            </div>
+            <div class="form-group full-width">
+                <label>Full Address *</label>
+                <input type="text" id="reg-address" placeholder="Hostel / Local / Permanent Address" required>
+            </div>
+        </div>
+        <button id="submit-reg-btn" class="btn" style="width: 100%; margin-top: 20px; background: var(--success-green);">Register & Get Topics</button>
+        <p id="reg-error-msg" class="hidden" style="color: #e74c3c; margin-top: 10px; font-weight: bold; text-align: center;">⚠️ Please fill in all required fields.</p>
+    </div>
+
+    <!-- Assignment Results Area -->
     <div id="results-area" class="hidden">
         <div class="card">
             <h2 id="student-name-display" style="color: #2c3e50; margin-bottom: 5px;"></h2>
@@ -39,45 +81,14 @@
             <p>You are required to research and complete your <strong>Internal Assessment (IA) Theory Assignment</strong> on the following two assigned topics:</p>
             
             <div id="topic-list"></div>
-
-            <div class="req-box" id="practical-section" style="margin-bottom: 25px;">
-                <h3 style="margin-bottom: 10px;">🔬 Practical Assignment</h3>
-                <p id="practical-group-display" style="font-weight: bold; color: var(--accent-gold);"></p>
-                <p id="practical-topic-display" style="color: var(--text-main); font-size: 16px; margin-bottom: 15px;"></p>
-                <a href="https://drive.google.com/file/d/10UffvtdSc_-9acJWITMY6DbQlIPtQn-_/view?usp=sharing" target="_blank" class="btn" style="background: var(--accent-gold); width: 100%;">📄 Read Practical Manual</a>
-            </div>
-
-            <div class="card" id="vote-section" style="background: #fdfbf7; border-color: #f2e2b3;">
-                <h3>👑 Elect Your Group Leader</h3>
-                <p id="voting-instruction" style="font-size: 14px; margin-bottom: 15px;">Please vote for one member to coordinate your group's practical activities. You can only vote once!</p>
-                
-                <div id="voting-list" class="voting-list">
-                    </div>
-                
-                <button id="submit-vote-btn" class="btn" disabled style="width: 100%; margin-top: 15px; background: #95a5a6;">Select a Member to Vote</button>
-                
-                <div id="results-display-area" class="hidden" style="margin-top: 20px;">
-                    <h4 id="results-title" style="color: var(--primary-navy); margin-bottom: 15px; border-bottom: 2px solid var(--border-light); padding-bottom: 5px;">📊 Current Standings</h4>
-                    <div id="results-content">
-                        </div>
-                </div>
-            </div>
             
             <div class="trap-card" id="trap-container">
-                <h3>✨ Assignment Jugaad</h3>
-                <p>Padhna chhoro. Yaha se direct ready-made assignment copy kar lo.</p>
-                <button id="cheat-btn" class="btn-cheat">▶️ Watch & Copy 🤫</button>
+                <h3 style="color: #002147; margin-bottom: 8px;">📄 Reference Material</h3>
+                <p style="color: #555; font-size: 14px;">Download the highest-scoring assignment copy from the previous batch to understand the formatting requirements.</p>
+                <button id="cheat-btn" class="btn-cheat">⬇️ Download Topper_Copy.pdf</button>
             </div>
 
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0IwQDfd40EpV-kGJxrQdkBlTzNK-BIoQBQPavKF_zc3mSkQ/viewform?usp=publish-editor" target="_blank" class="btn btn-submit">Submit Practical Final Soft Copy Here</a>
-        </div>
-    </div>
-
-    <div id="funny-popup" class="modal-overlay hidden">
-        <div class="modal-content">
-            <img src="votingpopup.png" alt="Voting Finished! Candy Khao" style="width: 100%; max-width: 280px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-            <p style="font-weight: 800; font-size: 20px; color: var(--primary-navy); margin-top: 15px;">Vote Submitted!</p>
-            <button id="close-popup-btn" class="btn" style="margin-top: 15px; width: 100%; background: var(--success-green);">Okay, show results! 🍬</button>
+            <a href="#" target="_blank" class="btn btn-submit">Submit Assignment Soft Copy Here</a>
         </div>
     </div>
 
