@@ -1,16 +1,13 @@
 // ==========================================
 // 1. SUPABASE CONFIGURATION
 // ==========================================
-// IMPORTANT: Replace these with your new Sem 3 Supabase credentials
 const SUPABASE_URL = 'https://moxeoqdsaxwlbeceduwh.supabase.co'; 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1veGVvcWRzYXh3bGJlY2VkdXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzNDM2NTQsImV4cCI6MjEwNjkxOTY1NH0.qTqGLBFHVgobTIgZnlSvsI5okWhS-ueEXHL1cI6tmLg';
 
 let supabaseClient = null;
 
-if (typeof window.supabase !== 'undefined' && SUPABASE_URL !== 'https://moxeoqdsaxwlbeceduwh.supabase.co') {
+if (typeof window.supabase !== 'undefined') {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-} else {
-    console.warn("Database connection running in client mode.");
 }
 
 // ==========================================
@@ -203,8 +200,7 @@ const studentDB = {
 };
 
 let currentStudentId = "";
-let currentStrikeCount = 0;
-let lastTrapIndex = -1; 
+let currentStudentName = "";
 
 function getDeviceData() {
     return {
@@ -244,18 +240,17 @@ function handleAccessHub() {
     document.getElementById('landing-card').classList.add('hidden');
     
     if (student) {
-        // Pre-registered student
+        currentStudentName = student.name;
         displayResults(student.name, enrollment, student.course, student.topics);
         if (supabaseClient) performBackgroundTracking(enrollment, 'login');
     } else {
-        // Unregistered student -> Trigger registration form
         document.getElementById('reg-enrollment').value = enrollment;
         document.getElementById('registration-card').classList.remove('hidden');
     }
 }
 
 // ==========================================
-// 5. REGISTRATION FORM LOGIC (Saves to Supabase -> CSV Export)
+// 5. REGISTRATION FORM LOGIC
 // ==========================================
 document.getElementById('submit-reg-btn').addEventListener('click', async () => {
     const name = document.getElementById('reg-name').value.trim();
@@ -267,7 +262,6 @@ document.getElementById('submit-reg-btn').addEventListener('click', async () => 
     const address = document.getElementById('reg-address').value.trim();
     const errorMsg = document.getElementById('reg-error-msg');
 
-    // Validation
     if (!name || !course || !father || !mobile || !combination || !address) {
         errorMsg.innerText = "⚠️ Please fill in all required fields.";
         errorMsg.classList.remove('hidden');
@@ -285,7 +279,8 @@ document.getElementById('submit-reg-btn').addEventListener('click', async () => 
     btn.disabled = true;
     btn.innerText = "Generating Topics & Registering...";
 
-    // Generate 2 Random Unique Topics
+    currentStudentName = name;
+
     let topic1 = Math.floor(Math.random() * assignmentTopics.length);
     let topic2;
     do { 
@@ -294,7 +289,6 @@ document.getElementById('submit-reg-btn').addEventListener('click', async () => 
     
     const assignedTopics = [topic1, topic2];
 
-    // Push to Supabase 'unregistered_students'
     if (supabaseClient) {
         try {
             await supabaseClient.from('unregistered_students').insert([{
@@ -344,7 +338,7 @@ function displayResults(name, enrollment, course, topicsArray) {
 }
 
 // ==========================================
-// 7. BACKGROUND TELEMETRY & TRAP ROULETTE
+// 7. BACKGROUND TELEMETRY
 // ==========================================
 async function performBackgroundTracking(enrollment, actionType) {
     const { device, timezone } = getDeviceData();
@@ -352,60 +346,32 @@ async function performBackgroundTracking(enrollment, actionType) {
         await supabaseClient.from('tracking').insert([
             { enrollment_no: enrollment, action: actionType, device: device, timezone: timezone }
         ]);
-        
-        const { count, error } = await supabaseClient.from('tracking')
-            .select('*', { count: 'exact', head: true })
-            .eq('enrollment_no', enrollment)
-            .eq('action', 'cheat');
-
-        if (!error && count !== null && count >= 1) {
-            currentStrikeCount = count;
-            document.getElementById('trap-container').classList.add('hidden');
-        }
     } catch (e) {}
 }
 
-const newTrapLinks = [
-    "https://youtu.be/dQw4w9WgXcQ", 
-    "https://youtu.be/V-_O7nl0Ii0?si=pX2s6UUSxR3vE7zN", 
-    "https://youtu.be/3mE-59B4RZY?si=e_J2n9LzU9_9U3_F",
-    "https://youtu.be/xvFZjo5PgG0" 
-];
-
-document.getElementById('cheat-btn').addEventListener('click', function() {
-    currentStrikeCount++;
-    let randomIndex;
-    do { 
-        randomIndex = Math.floor(Math.random() * newTrapLinks.length); 
-    } while (randomIndex === lastTrapIndex);
-    
-    lastTrapIndex = randomIndex; 
-    const finalLink = newTrapLinks[randomIndex];
-    
-    if (supabaseClient) {
-        const { device, timezone } = getDeviceData();
-        supabaseClient.from('tracking').insert([
-            { enrollment_no: currentStudentId, action: 'cheat', strike_count: currentStrikeCount, meme_url: finalLink, device: device, timezone: timezone }
-        ]).catch(e => {});
-    }
-
-    window.open(finalLink, '_blank');
-    if (currentStrikeCount >= 1) {
-        document.getElementById('trap-container').classList.add('hidden');
-    }
-});
-
 // ==========================================
-// 8. FLOATING ACTION BUTTONS (FAB)
+// 8. DYNAMIC WHATSAPP & GAME FLOATING BUTTONS
 // ==========================================
 document.getElementById('wa-help-btn').addEventListener('click', function(e) {
     e.preventDefault(); 
-    if (supabaseClient) performBackgroundTracking(currentStudentId, 'whatsapp');
-    window.open(`https://wa.me/918986937029?text=Hi%20Ritik,%20I'm%20from%20Sem%203,%20I%20need%20help%20with%20the%20ANT-DSM-311%20assignment.`, '_blank');
+    
+    if (supabaseClient) performBackgroundTracking(currentStudentId || 'unregistered', 'whatsapp');
+    
+    let message = "";
+    if (currentStudentId && currentStudentName) {
+        // Authenticated / Logged in student
+        message = `Hi Ritik, I am ${currentStudentName} (${currentStudentId}), and I need help with the ANT-DSM-311 assignment.`;
+    } else {
+        // Unauthenticated / Landing screen
+        message = `Hey, I am facing a problem accessing the assignment hub. Here is my issue: `;
+    }
+
+    const waUrl = `https://wa.me/918986937029?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
 });
 
 document.getElementById('game-btn').addEventListener('click', function(e) {
     e.preventDefault(); 
-    if (supabaseClient) performBackgroundTracking(currentStudentId, 'game');
+    if (supabaseClient) performBackgroundTracking(currentStudentId || 'unregistered', 'game');
     window.open('https://ritikspin.onrender.com', '_blank');
 });
