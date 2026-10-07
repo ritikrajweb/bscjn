@@ -220,7 +220,7 @@ document.getElementById('reg-mobile').addEventListener('input', function() {
 });
 
 // ==========================================
-// 4. LOGIN LOGIC
+// 4. LOGIN LOGIC (Checks Local DB + Supabase)
 // ==========================================
 document.getElementById('generate-btn').addEventListener('click', () => {
     handleAccessHub();
@@ -230,23 +230,70 @@ document.getElementById('enrollment-input').addEventListener('keypress', (e) => 
     if (e.key === 'Enter') handleAccessHub();
 });
 
-function handleAccessHub() {
+async function handleAccessHub() {
     const enrollment = document.getElementById('enrollment-input').value.trim().toUpperCase();
     if (!enrollment) return;
+
+    const btn = document.getElementById('generate-btn');
+    btn.disabled = true;
+    btn.innerText = "Checking...";
 
     currentStudentId = enrollment;
     const student = studentDB[enrollment];
     
-    document.getElementById('landing-card').classList.add('hidden');
-    
+    // 1. Check local pre-registered database
     if (student) {
+        document.getElementById('landing-card').classList.add('hidden');
         currentStudentName = student.name;
         displayResults(student.name, enrollment, student.course, student.topics);
         if (supabaseClient) performBackgroundTracking(enrollment, 'login');
-    } else {
-        document.getElementById('reg-enrollment').value = enrollment;
-        document.getElementById('registration-card').classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerText = "Access Hub";
+        return;
     }
+
+    // 2. Check Supabase for previously registered missing students
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('unregistered_students')
+                .select('*')
+                .eq('enrollment_no', enrollment)
+                .maybeSingle();
+
+            if (data && !error) {
+                document.getElementById('landing-card').classList.add('hidden');
+                currentStudentName = data.full_name;
+                
+                // Parse topics stored during registration
+                let topicList = [];
+                if (data.assigned_topics) {
+                    // Try parsing numeric indices or split topic titles
+                    const parts = data.assigned_topics.split(',');
+                    if (parts.length > 0 && !isNaN(parseInt(parts[0]))) {
+                        topicList = parts.map(i => parseInt(i.trim()));
+                    } else {
+                        topicList = data.assigned_topics.split(' | ');
+                    }
+                }
+                
+                displayResults(data.full_name, enrollment, data.course, topicList);
+                performBackgroundTracking(enrollment, 'login');
+                btn.disabled = false;
+                btn.innerText = "Access Hub";
+                return;
+            }
+        } catch (e) {
+            console.warn("Supabase check error:", e);
+        }
+    }
+
+    // 3. If student is not found anywhere -> Show Registration Form
+    document.getElementById('landing-card').classList.add('hidden');
+    document.getElementById('reg-enrollment').value = enrollment;
+    document.getElementById('registration-card').classList.remove('hidden');
+    btn.disabled = false;
+    btn.innerText = "Access Hub";
 }
 
 // ==========================================
@@ -281,6 +328,7 @@ document.getElementById('submit-reg-btn').addEventListener('click', async () => 
 
     currentStudentName = name;
 
+    // Generate 2 Random Unique Topics
     let topic1 = Math.floor(Math.random() * assignmentTopics.length);
     let topic2;
     do { 
@@ -289,6 +337,7 @@ document.getElementById('submit-reg-btn').addEventListener('click', async () => 
     
     const assignedTopics = [topic1, topic2];
 
+    // Save comma-separated topic indices for easy re-fetching (e.g., "3,10")
     if (supabaseClient) {
         try {
             await supabaseClient.from('unregistered_students').insert([{
@@ -299,7 +348,7 @@ document.getElementById('submit-reg-btn').addEventListener('click', async () => 
                 mobile_no: mobile,
                 combination: combination,
                 address: address,
-                assigned_topics: assignedTopics.map(i => assignmentTopics[i].title).join(' | ')
+                assigned_topics: assignedTopics.join(',')
             }]);
             performBackgroundTracking(enrollment, 'new_registration');
         } catch (e) {
@@ -320,12 +369,21 @@ function displayResults(name, enrollment, course, topicsArray) {
     
     const listDiv = document.getElementById('topic-list');
     let topicsHTML = "";
-    topicsArray.forEach(index => {
-        let topicObj = assignmentTopics[index];
-        if (topicObj) {
+    
+    topicsArray.forEach(item => {
+        let title = "";
+        if (typeof item === 'number' && assignmentTopics[item]) {
+            title = assignmentTopics[item].title;
+        } else if (typeof item === 'string') {
+            title = item;
+        } else if (item && item.title) {
+            title = item.title;
+        }
+        
+        if (title) {
             topicsHTML += `
                 <div class="book-item">
-                    <div class="book-title">${topicObj.title}</div>
+                    <div class="book-title">${title}</div>
                 </div>`;
         }
     });
