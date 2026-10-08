@@ -167,3 +167,22 @@ input[type="text"]:focus, select:focus { border-color: var(--primary-navy); box-
     .whatsapp-fab { bottom: 20px; right: 20px; width: 55px; height: 55px; } 
     .whatsapp-fab svg { width: 28px; height: 28px; }
 }
+
+/* Deadline Banner Styling */
+.deadline-banner {
+    background-color: #fff8e6;
+    color: #8a6d3b;
+    border: 1px solid #f5e79e;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    text-align: center;
+    margin: 15px 0 20px 0;
+    font-weight: 500;
+}
+
+.deadline-banner.warning {
+    background-color: #fdf2f2;
+    color: #a94442;
+    border-color: #f8d7da;
+}
